@@ -17,14 +17,14 @@
 # 2. Jenkins를 이용한 CI 구성 및 실습
 - Jenkins CI 역할 pipeline 이해
   - git clone
-  - jib
+  - jib ...
 
-  - Helm Chart 를 활용한 Jenkins 설치 실습(Local)
-  - Pipeline 실습(Cloud)
+- Helm Chart 를 활용한 Jenkins 설치 실습(Local)
+- Pipeline 실습(Cloud)
 
 # 3. ArgoCD를 이용한 CD 구성 및 실습
-  - GitOps 및 GitFlow 이해 및 셋팅
-  - Helm Chart 를 활용한 ArgoCD 설치 실습(Local)
-  - ArgoCD 배포 실습(Cloud) 
+- GitOps 및 GitFlow 이해 및 셋팅
+- Helm Chart 를 활용한 ArgoCD 설치 실습(Local)
+- ArgoCD 배포 실습(Cloud) 
 
 
