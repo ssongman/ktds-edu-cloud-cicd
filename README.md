@@ -11,13 +11,13 @@
 
 
 
-# 1. 시작하기전에
+# 1. 시작하기전에 ( [문서 보기](./beforebegin/beforebegin.md) )
 
 
 
 
 
-# 2. 클라우드 환경에서 형상관리
+# 2. 클라우드 환경에서 형상관리 ( [문서 보기](./cloud-branch/cloud-branch.md) )
 
 - 12 Factor App 원칙
 - 소스코드 형상관리 및 Branch 전략
@@ -29,7 +29,7 @@
 
 
 
-# 3. Jenkins를 이용한 CI 구성 및 실습
+# 3. Jenkins를 이용한 CI 구성 및 실습 ( [문서 보기](./jenkins/jenkins.md) )
 - Jenkins CI 역할 pipeline 이해
   - git clone
   - jib ...
@@ -39,14 +39,14 @@
 
 
 
-# 4. ArgoCD를 이용한 CD 구성 및 실습
+# 4. ArgoCD를 이용한 CD 구성 및 실습 ( [문서 보기](./argocd/argocd.md) )
 - GitOps 및 GitFlow 이해 및 셋팅
 - Helm Chart 를 활용한 ArgoCD 설치 실습(Local)
 - ArgoCD 배포 실습(Cloud) 
 
 
 
-#  별첨. EduCluster Solution Setup ( [가이드 문서 보기](./cluster-setup/cluster-setup.md) )
+#  별첨. EduCluster Solution Setup ( [문서 보기](./cluster-setup/cluster-setup.md) )
 
 ## 1) GitLab Setup
 
