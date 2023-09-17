@@ -46,7 +46,7 @@
 
 
 
-#  별첨. EduCluster Solution Setup ( [가이드 문서 보기](https://github.com/ssongman/ktds-edu-kafka-redis/blob/main/cloud-setup/cloud-setup.md) )
+#  별첨. EduCluster Solution Setup ( [가이드 문서 보기](./cluster-setup/cluster-setup.md) )
 
 ## 1) GitLab Setup
 

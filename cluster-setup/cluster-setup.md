@@ -416,11 +416,11 @@ OS/Arch:      linux/amd64
 
 # 1. Install
 
-## 1.1 with yaml - gitlab-ce
+> with yaml - gitlab-ce
 
 
 
-### 1) deployment and service
+## 1) deployment and service
 
 ```sh
 
@@ -467,7 +467,7 @@ spec:
 
 
 
-### 2) ingress
+## 2) ingress
 
 ```sh
 
@@ -498,15 +498,15 @@ spec:
               
 ---
 
-
-
 ```
 
 
 
 
 
-### 3) [참고] route
+## 3) [참고] route
+
+Openshift 를사용할 경우는 아래와 같이 Route 를 등록한다.
 
 ```sh
 
@@ -534,7 +534,7 @@ spec:
 
 
 
-### 4) 권한부여
+## 4) 권한부여
 
 ```sh
 
@@ -562,7 +562,7 @@ subjects:
 
 
 
-### 5) 초기 root 패스워드
+## 5) 초기 root 패스워드
 
 ```sh
 # log...
@@ -576,12 +576,37 @@ By default, Omnibus GitLab automatically generates a password for the initial ad
 
 cat /etc/gitlab/initial_root_password
 
-yBTdTn9SmJ3V36V2vypW4sludaordc2FJG8S86BX1N0=
+Password: 8NkH1b3j9Hp0EQtIyPoKOtYT8npuly0tXjfPzak5Ggc=
+
+# 패스워드 변경 24시간 후 위 파일은 자동으로 삭제된다.
+
+
+
+# 패스워드 변경
 
 id : root
-password : 양근xx1!
+password : ktdspass!
 
-Password must not contain commonly used combinations of words and letters
+```
+
+
+
+
+
+## 6) 확인
+
+
+
+```sh
+
+
+http://gitlab.35.209.207.26.nip.io
+
+id : root
+
+password : ktdspass!
+
 
 
 ```
+
