@@ -243,7 +243,7 @@ Hooks and filters directory? [/home/ktdseduuser/song/gittest/gitflow/.git/hooks]
 
 
 
-### feature Branch 생성
+### feature start
 
 ```sh
 
@@ -269,7 +269,7 @@ $ git branch -a
 
 
 
-### feature  Branch 완료
+### feature  finish
 
 Git flow feature 가 완료되면 feature branch 가 삭제된다.
 
@@ -330,7 +330,7 @@ $ git branch -a
 
 
 
-### release Branch 완료
+### release finish
 
 release Branche작업 완료시 finish 명령을 사용한다.
 
@@ -470,7 +470,7 @@ $ git branch -a
 
 
 
-### feature Branch 생성
+### feature start
 
 * 기능 개발 시작
   * A 파일을 삭제
@@ -550,7 +550,7 @@ nothing to commit, working tree clean
 
 
 
-feature 개발 완료 반영
+### feature finish
 
 ```sh
 
@@ -670,7 +670,7 @@ Follow-up actions:
 
 
 
-### release Branch 완료
+### release finish
 
 ```sh
 $ git flow release finish 1.0.0
@@ -736,7 +736,98 @@ release finish 때 진행하는 작업을 살펴보자
 
 
 
+
+
+### hotfix start
+
+1.0.0 을 배포후 확인해 보니 기능D 가 급하게 추가 되어야 하는 상황이 발생했다. 
+
+hotfix 브랜치를 생성해야 한다.
+
+hotfix 브랜치는 production 인 master branch 를 기반으로 생성된다.
+
+
+
+```sh
+
+$ git flow hotfix start 1.0.1
+
+Switched to a new branch 'hotfix/1.0.1'
+
+Summary of actions:
+- A new branch 'hotfix/1.0.1' was created, based on 'master'
+- You are now on branch 'hotfix/1.0.1'
+
+Follow-up actions:
+- Start committing your hot fixes
+- Bump the version number now!
+- When done, run:
+
+     git flow hotfix finish '1.0.1'
+
+
+~/temp/gitflowtest(hotfix/1.0.1)$
+ 
+ 
+
+### 기능 D 추가
+
+~/temp/gitflowtest(hotfix/1.0.1)$ echo ddd > D
+ 
+~/temp/gitflowtest(hotfix/1.0.1)$ ll
+-rw-rw-r-- 1 ktdseduuser ktdseduuser    4 Sep 20 10:10 B
+-rw-rw-r-- 1 ktdseduuser ktdseduuser    4 Sep 20 10:10 C
+-rw-rw-r-- 1 ktdseduuser ktdseduuser    4 Sep 20 15:31 D
+
+
+# add & commit
+~/temp/gitflowtest(hotfix/1.0.1)$ git add .
+~/temp/gitflowtest(hotfix/1.0.1)$ git commit -m "create D"
+
+```
+
+* 긴급 개발후 테스트까지 종료했다.
+
+
+
+
+
+
+
+### hotfix finish
+
+```sh
+
+# hotfix finish
+~/temp/gitflowtest(hotfix/1.0.1)$ git flow hotfix finish 1.0.1
+Switched to branch 'develop'
+Your branch is up to date with 'origin/develop'.
+Deleted branch hotfix/1.0.1 (was 25f9958).
+
+Summary of actions:
+- Hotfix branch 'hotfix/1.0.1' has been merged into 'master'
+- The hotfix was tagged '1.0.1'
+- Hotfix branch 'hotfix/1.0.1' has been locally deleted
+- You are now on branch 'develop'
+
+```
+
+* release finish 작업 절차와 유사하다.
+  * hotfix 브랜치 코드를 master, develop 으로 merge
+  * hotfix 브랜치 name 으로 tag 생성
+  * local hotfix 브랜치 삭제
+
+
+
 현재까지는 local 에서만 진행된 상황이며 이를 orgin 에 업데이트 하려면 git push를 수행해야 한다.
+
+```sh
+
+$ git push origin master develop 1.0.0 1.0.1
+
+```
+
+
 
 
 
@@ -755,8 +846,6 @@ git flow 실습자료를 remote 와 연결해 보자.
 
 
 ### git remote 
-
-
 
 
 
@@ -797,7 +886,7 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 
 
-## 8) ICIS-TR 에서는
+## 9) ICIS-TR 에서는
 
 * Git 
 
@@ -807,7 +896,7 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 
 
-## 9) 마무리
+## 10) 마무리
 
 * Git Flow 는 Code 관리 모델이며  Branch를 어떻게 관리하겠다는 전략이자 약속
 * Git Flow 를 기반으로 현장 상황에 맞도록 커스텀이 가능
