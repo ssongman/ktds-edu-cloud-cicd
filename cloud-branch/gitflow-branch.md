@@ -413,7 +413,7 @@ git init 이후에는 반드시 초기 commit 을 수행해야 한다.
 # 초기 기본Branch 설정
 $ git config --global init.defaultBranch master
   git config --global user.email "ssongmantop@gmail.com"
-  git config --global user.name "ssongman"
+  git config --global user.name "root"
 
 $ git init
 
@@ -746,6 +746,57 @@ release finish 때 진행하는 작업을 살펴보자
 
 
 
+## 8) git flow 실습3
+
+
+
+git flow 실습자료를 remote 와 연결해 보자.
+
+
+
+### git remote 
+
+
+
+
+
+```sh
+
+
+$ cd ~/temp/gitflowtest
+
+
+$ git checkout master
+ 
+$ git remote add origin http://gitlab.35.209.207.26.nip.io/cloud-branch/gitflow-test/edu01.git
+
+$ git remote -v
+
+# 모든 branch 업로드
+$ git push origin master develop 1.0.0
+
+$ git push -u origin mast
+Username for 'http://gitlab.35.209.207.26.nip.io': root
+Password for 'http://root@gitlab.35.209.207.26.nip.io':
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (12/12), 820 bytes | 410.00 KiB/s, done.
+Total 12 (delta 3), reused 0 (delta 0), pack-reused 0
+To http://gitlab.35.209.207.26.nip.io/cloud-branch/gitflow-test/edu01.git
+ * [new branch]      master -> master
+Branch 'master' set up to track remote branch 'master' from 'origin'.
+
+
+```
+
+
+
+
+
+
+
 ## 8) ICIS-TR 에서는
 
 * Git 
@@ -832,15 +883,20 @@ $ git status
 
 ### git clean
 
+신규 파일을 생성후 이를 원복하고자 할때  사용됨
+
 untracked 상태인 파일을 모두 삭제
 
 ```sh
-$ cd ~/song/gittest/our-project
+$ cd ~/song/gittest
 
 
+# 신규 파일 생성
 $ echo "some1" > some.txt
-$ mkdir somedir
-$ echo "some2" > somedir/some.txt
+  mkdir somedir
+  echo "some2" > somedir/some.txt
+
+
 $ git status
 On branch master
 Untracked files:
@@ -859,7 +915,6 @@ total 16
 drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:23 ./
 drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:07 ../
 drwxrwxr-x 8 ktdseduuser ktdseduuser 4096 Sep 17 14:23 .git/
--rw-rw-r-- 1 ktdseduuser ktdseduuser    6 Sep 17 14:22 some.txt
 
 
 ```
@@ -875,7 +930,7 @@ git reset 명령은 공통적으로 커밋을 되돌릴 때 사용한다.
 가장 많이 사용하는 명령은 `reset --hard` 이다.
 
 ```sh
-$ cd ~/song/gittest/our-project
+$ cd ~/song/gittest
 
 git switch master
 
@@ -1033,7 +1088,7 @@ cat main2.txt
 
 
 
-# 3. 기타
+# 3. [참고] 기타
 
 
 
