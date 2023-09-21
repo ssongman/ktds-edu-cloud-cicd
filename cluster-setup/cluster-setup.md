@@ -610,3 +610,62 @@ password : ktdspass!
 
 ```
 
+
+
+
+
+
+
+# < 기타 >
+
+
+
+
+
+## worker node 추가
+
+16GB * 4EA
+
+
+
+* namespace 는 사전에 만들어 놓는다. -- 종수
+
+edu01
+edu02
+...
+edu20
+
+
+
+
+
+### VM 설정
+
+bastion01 ~ bastion20
+
+
+
+k3s  -- local 이 아닌 educluster 연결만....
+
+helm
+
+docker
+
+git
+
+git flow
+
+curl
+
+nc
+
+ping
+
+ipconfig
+
+net-tools
+
+
+
+
+

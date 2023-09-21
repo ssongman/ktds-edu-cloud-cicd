@@ -239,6 +239,34 @@ C:\githubrepo\ktds-edu-kafka-redis\README.md
 
 
 
+권혜원(ICIS Tr 고객팀) <HYEWON.KWON@KT.COM>;
+김명선(AICC서비스1팀) <MYUNGSUN.KIM@KT.COM>;
+김수진(ICIS Tr 아키텍처팀) <SJ0831.KIM@KT.COM>;
+김재혁(ICIS Tr 빌링팀) <JAEHYUCK.KIM@KT.COM>;
+백상열(ICIS Tr 아키텍처팀) <SY44.BAEK@KT.COM>;
+서정원(고객개발1팀) <JUNGWON.SEO@KT.COM>;
+서현직(인프라DX개발팀) <LESLIE.SEO@KT.COM>;
+송하영(ICIS Tr 아키텍처팀) <HA0.SONG@KT.COM>;
+양행모(고객DX솔루션팀) <HAENGMO.YANG@KT.COM>;
+이도겸(ICIS Tr 아키텍처팀) <DOKYEOM.LEE@KT.COM>;
+이돈민(ICIS Tr 고객팀) <MONEY.MIN@KT.COM>;
+이병훈(DWP개발팀) <BYUNGHOON.LEE@KT.COM>;
+이승미(인프라DX개발팀) <SEUNGMII.LEE@KT.COM>;
+이영효(고객개발1팀) <LEE.YOUNGHYO@KT.COM>;
+이지현(Rater서비스팀) <JIHYUN7.LEE@KT.COM>;
+임성식(ICIS Tr 빌링팀) <SSLIM@KT.COM>;
+임지윤(AI서비스팀) <JEEYOON.LIM@KT.COM>;
+조민정(CRM사업팀) <HS-CHO@KT.COM>;
+최종수(ICIS Tr 아키텍처팀) <JONGSOO.CHOI@KT.COM>
+
+
+
+
+
+
+
+
+
 
 
 ## 3.2 ssh (Mobaxterm) 실행
