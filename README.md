@@ -39,19 +39,35 @@
 
 
 # 4. Jenkins를 이용한 CI 구성 및 실습 ( [문서 보기](./jenkins/jenkins.md) )
-- Jenkins CI 역할 pipeline 이해
-  - git clone
-  - jib ...
-
-- Helm Chart 를 활용한 Jenkins 설치 실습(Local)
-- Pipeline 실습(Cloud)
+- Jenkins란?
+- 사전준비
+  - K8S Resource
+  - Dockerfile
+  - PipeLine Template
+- Jenkins Helm 설치 & 설정 (Cloud)
+- Jenkins CI 수행하기 (Cloud)
+- 다양한 옵션 사용
 
 
 
 # 5. ArgoCD를 이용한 CD 구성 및 실습 ( [문서 보기](./argocd/argocd.md) )
-- GitOps 및 GitFlow 이해 및 셋팅
-- Helm Chart 를 활용한 ArgoCD 설치 실습(Local)
-- ArgoCD 배포 실습(Cloud) 
+- ArgoCD란?
+- 사전준비
+  - GitOps
+- ArgoCD Helm 설치 & 설정 (Cloud)
+- ArgoCD 배포하기 (Cloud)
+- 다양한 배포전략 
+
+
+
+#  별첨. Nexus Repository Setup ( [문서 보기](./nexus/nexus.md) )
+
+## 1) Nexus
+
+- Nexus란?
+  - 사설레포지토리가 필요한 이유
+- Nexus 설치 & 설정
+- Image Upload/Download 테스트
 
 
 
@@ -75,3 +91,15 @@
 - Redis Cluster Install
 - Web UI (P3X / RedisInsight)
 
+
+
+#  별첨. Helm ( [문서 보기](./helm/helm.md) )
+
+## 1) Helm
+
+- helm install
+  - helm chart 와 Architecture
+  - helm client download
+  - bitnami repo 추가
+
+``
