@@ -7,7 +7,7 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('npm') {
                 sh"""
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/base-project/${USER_IDENTITY}.git
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
         }
