@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-spring
+  namespace: nexus
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: hello-spring
+  template:
+    metadata:
+      labels:
+        app: hello-spring
+    spec:
+      containers:
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/spring-test:2.0.0
+        name: hello-spring
+        ports:
+        - containerPort: 8080

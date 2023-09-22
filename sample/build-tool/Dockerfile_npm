@@ -1,0 +1,5 @@
+FROM node:16
+COPY ./kustomize /usr/local/bin/kustomize
+
+
+#docker build -f Dockerfile_npm -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool:1.0.3 ./

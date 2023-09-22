@@ -1,0 +1,5 @@
+FROM maven:3.8.4-openjdk-17
+COPY ./kustomize /usr/local/bin/kustomize
+#RUN apk update && apk add git
+
+#docker build -f Dockerfile_maven -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/maven-build-tool:1.0.3 ./

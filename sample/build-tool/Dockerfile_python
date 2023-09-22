@@ -1,0 +1,5 @@
+FROM python:latest
+COPY ./kustomize /usr/local/bin/kustomize
+
+
+#docker build -f Dockerfile_python -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/python-build-tool:1.0.3 ./

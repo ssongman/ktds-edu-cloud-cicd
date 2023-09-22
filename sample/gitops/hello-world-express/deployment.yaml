@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-express
+  namespace: nexus
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: hello-express
+  template:
+    metadata:
+      labels:
+        app: hello-express
+    spec:
+      containers:
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test:2.0.2
+        name: hello-express
+        ports:
+        - containerPort: 3000

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-flask-svc
+spec:
+  ports:
+  - port: 80
+    targetPort: 8082
+  selector:
+    app: hello-flask

@@ -1,0 +1,44 @@
+def TAG = new Date().format('yyyyMMddHHmmss')
+
+podTemplate(label: 'hello',
+	containers: [
+        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+  ]) {
+    node('hello') {
+        stage('Get Source') {
+            container('npm') {
+                sh"""
+                git clone https://${GIT_TOKEN}@github.com/jssss93/eduTest.git
+                """
+            }
+        }
+        stage('Build & push') {
+            container('podman') {
+                    sh """
+                    cd eduTest/hello-world-express
+                    podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/test/express-test:${TAG} --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/test/express-test:${TAG}  --tls-verify=false
+                    """
+            }
+        }
+        
+        stage('gitOps Update') {
+            container('podman') {
+            sh"""
+            cd eduTest/gitops/hello-world-express
+            
+            git config --global user.email "jenkins@example.com"
+            git config --global user.name "Jenkins Pipeline"
+  
+            kustomize edit set image ${NEXUS_HOST}/test/express-test:${TAG}
+            
+            git add .
+            git commit -am 'update  from Jenkins'
+            git push
+            """
+            }
+        }
+    }
+}
