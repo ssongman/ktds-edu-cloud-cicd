@@ -888,7 +888,19 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 ## 9) ICIS-TR 에서는
 
-* Git 
+
+
+
+
+### git flow branch 전략 흐름도
+
+
+
+
+
+1. Local Repository 에서 git-flow를 초기화한다.
+
+
 
 
 
