@@ -4,7 +4,9 @@
 
 
 
-모든 언어의 조합과 소스 코드 레포지토리에 대한 **지속적인 통합(Continuous integration, CI)**과 지속적 배포(continuous delivery, CD) 환경을 구축하기 위한 도구다. 빌드, 테스트, 배포 프로세스를 자동화하여 소프트웨어 품질과 개발 생산성을 높일 수 있다.
+모든 언어의 조합과 소스 코드 레포지토리에 대한 지속적인 통합과 지속적 전달 그리고 지속적 배포 환경을 구축하기 위한 도구다. 
+
+빌드, 테스트, 배포 프로세스를 자동화하여 소프트웨어 품질과 개발 생산성을 높일 수 있다.
 
 | 웹사이트        | jenkins-ci.org |
 | --------------- | -------------- |
@@ -17,7 +19,7 @@
 
 
 
-**편리한설정**
+**편리한 설정**
 
 웹 기반의 콘솔로 다양한 인증 기반과 결합이 가능하며 권한 관리 기능을 통해 안전한 빌드/배포 환경을 구축할 수 있다. 수많은 플러그인을 사용하여 자동화 할 수 있어 반복되는 작업을 줄일 수 있다. 빌드/배포의 결과에 대해 통지 받을 수 있는 설정이 간편하고 다양한 채널을 통해 빠르게 피드백을 받을 수 있다.
 
@@ -49,7 +51,7 @@ Jenkins는 많이 사용 되고 있는 오픈 소스 소프트웨어로 문서�
 - 자동화 테스트 수행
 - 정적 코드 분석에 의한 코딩 규약 준수여부 체크
 
-이 외에도 젠킨스는 1,800여가지가 넘는 플러그인을 온라인으로 간단히 인스톨 할 수 있는 기능을 제공하고 있으며 파이썬과 같은 스크립트를 이용해 손쉽게 자신에게 필요한 기능을 추가 할 수도 있다.
+이 외에도 젠킨스는 1,800여가지가 넘는 플러그인을 온라인으로 간단히 인스톨 할 수 있는 기능을 제공하고 있으며 쉘, 파이썬과 같은 스크립트를 이용해 손쉽게 자신에게 필요한 기능을 추가 할 수도 있다.
 
 
 
@@ -87,7 +89,7 @@ a. 특정 마이크로서비스의 변경사항이 Source repo에 commit 된다.
 
 b. Jenkins의 Build Job이 해당 변경사항을 감지 또는 수동으로 Job을 실행하여 Docker Image 빌드를 수행한다.
 
-c. 빌드의 결과물은 Nexus Image Repository에 Push된다. (이미지 Tag는 Jenkins의 BuildNumber)
+c. 빌드의 결과물은 Nexus Image Repository에 Push된다. 
 
 
 
@@ -103,7 +105,7 @@ c. 빌드의 결과물은 Nexus Image Repository에 Push된다. (이미지 Tag�
 
 하지만 VM으로 운영되는 Jenkins(master-slave) 구조는 아래와 같은 단점이 있다.
 
-- Job에 필요한 plugin들을 master에 설치, 관리 필요
+- Master 는 Slave 를 관리하기위해 지속적인 커넥션 및 설정 관리필요
 - Job에 비해서 slave가 많으면 비효율적임(slave가 놀고 있음)
 - Job에 비해서 slave가 적으면 비효율적임(slave가 부족해서 기다리는 job이 많아짐)
 - 즉, Job이 늘어나고 줄어듦에 따라 Jenkins slave를 늘리거나 줄여야하는(사람이 직접 설치해야하는) 단점
@@ -120,7 +122,7 @@ Cluster 환경에서 Kubernetes Plugin 적용 후 아래와 같은 이점이 생
   **- 관리가 한결 편해진다.**
 - Jenkins slave는 쿠버네티스 클러스터에서 Pod으로 동적 생성/삭제됨
   **- 확장 용이성 증가로 리소스의 효율화**
-- 각 Job에 따라 필요한 리소스를 정의하여 관리가능
+- 각 Job에 따라 필요한 리소스를 각각 정의하여 관리가능
   **- 각 Job에 따라 필요한 리소스(maven, gradle, docker 등)를 직접 pipeline에 정의하여 사용
   \- master가 plugin들을 관리할 필요가 없음!**
 
@@ -156,7 +158,7 @@ metadata:
 
 
 
-**ClusterRole**: 롤(Role)은 특정 api나 리소스에 대한 권한들을 명시해둔 규칙들의 집합입니다. 롤에는 그냥 롤(Role)과 클러스터롤(ClusterRole) 2가지 종류가 있습니다. 롤은 그 롤이 속한 네임스페이스에 한곳에만 적용됩니다. 클러스터롤은 특정 네임스페이스에 대한 권한이 아닌 **클러스터 전체에 대한 권한을 관리**합니다.
+**ClusterRole**: 롤(Role)은 특정 api나 리소스에 대한 권한들을 명시해둔 규칙들의 집합입니다. 롤에는 일반 롤(Role)과 클러스터롤(ClusterRole) 2가지 종류가 있습니다. 롤은 그 롤이 속한 네임스페이스에 한곳에만 적용됩니다. 클러스터롤은 특정 네임스페이스에 대한 권한이 아닌 **클러스터 전체에 대한 권한을 관리**합니다.
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
@@ -195,12 +197,57 @@ subjects:
 
 ```
 
+
+
+---
+
+#### 2.2 Gitlab
+
+##### 2.2.1 GitLab Token 
+
+http://gitlab.35.209.207.26.nip.io/
+
+![image-20230919090743189](asset/jenkins/image-20230919090743189.png)
+
+![image-20230919090855977](asset/jenkins/image-20230919090855977.png)
+
+![image-20230919091107663](asset/jenkins/image-20230919091107663.png)
+
+
+
+![image-20230919091158245](asset/jenkins/image-20230919091158245.png)
+
+
+
+##### 2.2.2 프로젝트 생성
+
+
+
+**New Project**
+
+![image-20230923002419919](asset/jenkins/zzxcvasdasdasd.png)
+
+
+
+**Import Project**
+
+![image-20230923002522058](asset/jenkins/image-20230923002522058.png)
+
+**Import Project 정보입력**(http://gitlab.35.209.207.26.nip.io/user01/base-project.git)
+
+![image-20230923002120221](asset/jenkins/asdasdfzxcv.png)
+
+**Project Clone**
+
 ```bash
-#serviceAccount, ClusterRole,ClusterRoleBinding 배포
-$ k -n nexus apply -f jenkins-service-account.yaml 
-$ k -n nexus apply -f jenkins-cluster-role.yaml 
-$ k -n nexus apply -f jenkins-cluster-role-binding.yaml 
+#base-project clone
+$ git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/user01/base-project.git
+
+Credential : ${GIT_TOKEN} 입력
+
 ```
+
+${USER_IDENTITY}, ${GIT_TOKEN} 일괄 변경
 
 
 
@@ -208,7 +255,9 @@ $ k -n nexus apply -f jenkins-cluster-role-binding.yaml
 
 
 
-#### 2.2 Dockerfile 작성 및 빌드 테스트
+
+
+#### 2.3 Dockerfile 작성 및 빌드 테스트(Local)
 
 **Dockerfile 이란?**
 
@@ -318,12 +367,12 @@ CMD ["world"]
 
 
 
-##### 2.2.1 Maven(Java)
+##### 2.3.1 Maven(Java)
 
 Sample Project
 
 ```bash
-$ cd hello-world-spring/demo
+$ cd sample/hello-world-spring/demo
 ```
 
 
@@ -369,12 +418,12 @@ $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/sprin
 
 
 
-##### 2.2.2 Npm(node.js) 
+##### 2.3.2 Npm(node.js) 
 
 Sample Project
 
 ```bash
-$ cd resources/hello-world-express
+$ cd sample/hello-world-express
 ```
 
 
@@ -432,12 +481,12 @@ $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/expre
 
 
 
-##### 2.2.3 Flask(python) 
+##### 2.3.3 Flask(python) 
 
 Sample Project
 
 ```bash
-$ cd resources/hello-world-flask
+$ cd sample/hello-world-flask
 ```
 
 
@@ -509,11 +558,13 @@ ce0f4c80e9b7: Pushed
 
 ```
 
-#### 
+
 
 ---
 
-#### 2.3 베이스 이미지 업로드
+
+
+#### 2.4 베이스 이미지[Build-tool] 업로드(Local)
 
 kustomize 다운로드 URL : https://github.com/kubernetes-sigs/kustomize
 
@@ -526,7 +577,8 @@ kustomize 다운로드 URL : https://github.com/kubernetes-sigs/kustomize
 **podman build-tool**
 
 ```bash
-$ cd resources/build-tool
+$ cd sample/build-tool
+$ cat Dockerfile
 ```
 
 
@@ -561,6 +613,7 @@ nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool          1.0.0           
 
 $ docker run -d nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0 sleep 365d
 
+$ docker ps
 $ docker exec -it ${CONTAINER_ID} bash
 $ podman version
 Version:            1.8.0
@@ -654,7 +707,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
+$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
 [+] Building 3.0s (7/7) FINISHED                                                      
  => [internal] load build definition from Dockerfile_npm                              0.0s
  => => transferring dockerfile: 206B                                                  0.0s
@@ -733,7 +786,7 @@ Image Build & Push
 
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/python-build-tool:1.0.0 -f .\Dockerfile_python .
+$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0 -f .\Dockerfile_python .
 [+] Building 7.5s (7/7) FINISHED
  => [internal] load build definition from Dockerfile_python                                       0.0s
  => => transferring dockerfile: 221B                                                              0.0s
@@ -793,7 +846,7 @@ b8544860ba0b: Layer already exists
 
 
 
-### 3. Jenkins Helm 설치
+### 3. Jenkins Helm 설치(Cluster)
 
 #### 3.1 Helm Chart 준비
 
@@ -846,7 +899,13 @@ jenkins/VALUES_SUMMARY.md
 #TimeZone 설정
 $ vi values.yaml
 
-javaOpts: "-Duser.timezone=Asia/Seoul"
+controller:
+
+...
+
+  javaOpts: "-Duser.timezone=Asia/Seoul"
+
+!wq
 ```
 
 #### 3.1 Helm Install 
@@ -871,13 +930,8 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
 --set agent.resources.limit.memory=1024Mi
 
 #helm chart delete
-$ helm -n nexus delete jenkins
+$ helm -n ${USER_IDENTITY} delete jenkins
 
-#agent 기동 옵션 (필요시 설정)
---set agent.resources.requests.cpu=1024m \
---set agent.resources.requests.memory=1024Mi \
---set agent.resources.limit.cpu=1024m \
---set agent.resources.limit.memory=1024Mi
 ```
 
 
@@ -904,33 +958,23 @@ Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
 ![image-20230916201049526](asset/jenkins/image-20230916201049526.png)
 
+
+
 **Plugin Update**
 
 전체선택 후 Update 클릭
 
 ![image-20230918212051456](asset/jenkins/image-20230918212051456.png)
 
+**Plugin install**
+
+![image-20230923010016083](asset/jenkins/image-20230923010016083.png)
+
+
+
 #### 4.2 Git-Token 발급 
 
-**4.2.1 GITLAB**
-
-http://gitlab.35.209.207.26.nip.io/
-
-![image-20230919090743189](asset/jenkins/image-20230919090743189.png)
-
-![image-20230919090855977](asset/jenkins/image-20230919090855977.png)
-
-![image-20230919091107663](asset/jenkins/image-20230919091107663.png)
-
-
-
-![image-20230919091158245](asset/jenkins/image-20230919091158245.png)
-
-glpat-oLxyZ61UkuB9ysz6nw8T
-
-
-
-**4.2.2 GITHUB**
+**4.2.1 GITHUB**
 
 https://github.com/settings/tokens or github -> settings -> developer settings -> Personal access tokens
 
@@ -964,7 +1008,7 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 **정보입력**
 
-![image-20230916205539590](asset/jenkins/image-20230916205539590.png)
+![image-20230923010524655](asset/jenkins/image-20230923010524655.png)
 
 
 
@@ -1109,7 +1153,7 @@ Docker는 애플리케이션을 빌드하고 컨테이너화하기 위한 **Dock
 
 
 
-Docker Engine에는 컨테이너 이미지를 관리하고, 컨테이너 이미지를 이용해 컨테이너를 실행하기 위한 Docker daemon이 있습니다. 그리고, 이미지와 컨테이너를 사용자가 관리하고 사용할 수 있도록 커맨드 기반으로 된 Docker Client가 있습니다. Podman 역시 컨테이너를 실행하기 위한 컨테이너 이미지, 그리고, 이미지를 통해 실행된 컨테이너와 이를 사용하기 위한 커맨드 기반의 유틸리티가 있습니다. 
+Docker Engine에는 **컨테이너 이미지를 관리하고, 컨테이너 이미지를 이용해 컨테이너를 실행하기 위한 Docker daemon**이 있습니다. 그리고, **이미지와 컨테이너를 사용자가 관리하고 사용할 수 있도록 커맨드 기반으로 된 Docker Client**가 있습니다. Podman 역시 컨테이너를 실행하기 위한 **컨테이너 이미지, 그리고, 이미지를 통해 실행된 컨테이너와 이를 사용하기 위한 커맨드 기반의 유틸리티**가 있습니다. 
 
 
 
@@ -1125,29 +1169,25 @@ Docker는 컨테이너 레지스트리로부터 이미지를 받아와 Docker �
 
 
 
-반면에 Podman은 daemon 없이 커맨드로 컨테이너 레지스트리로부터 이미지를 받아와 Podman 호스트의 로컬 이미지 저장소에 이미지를 저장하고, 해당 이미지를 이용하여 컨테이너를 실행합니다. 이때 podman 라이브러리를 통해 바로 컨테이너를 실행하기 때문에 컨테이너 간에 서로 영향을 주지 않으며, 컨테이너와 이미지 사이, 커맨드 명령어로 컨테이너를 제어하거나 이미지를 관리할 때도 서로 영향을 주지 않습니다.
+반면에 **Podman은 daemon 없이 커맨드로 컨테이너 레지스트리로부터 이미지를 받아와 Podman 호스트의 로컬 이미지 저장소에 이미지를 저장하고, 해당 이미지를 이용하여 컨테이너를 실행**합니다. 이때 podman 라이브러리를 통해 바로 컨테이너를 실행하기 때문에 컨테이너 간에 서로 영향을 주지 않으며, 컨테이너와 이미지 사이, 커맨드 명령어로 컨테이너를 제어하거나 이미지를 관리할 때도 서로 영향을 주지 않습니다.
 
 
 
-즉 Podman은 컨테이너 및 컨테이너 이미지를 실행하고 관리 할 수 있다. docker와 동일한 기능과 명령 옵션의 대부분을 지원하지만 차이점은 podman은 docker 또는 다른 활성 컨테이너 런타임이 필요하지 않다는 것이다.
+**즉 Podman은 컨테이너 및 컨테이너 이미지를 실행하고 관리 할 수 있습니다. 그리고 docker와 동일한 기능과 명령 옵션의 대부분을 지원하며** 
+
+**차이점은 podman은 docker 또는 다른 활성 컨테이너 런타임이 필요하지 않다는 것이다.**
 
 
 
 **kubernetes docker 지원 중단이슈**
 
-현재 Docker는 Mirantis(미란티스)가 인수해서 cri-docker를 지원함.
+kubernetes의 default container runtime 이었던 docker 가 v1.20 부터 deprecated 되었으며 docker를 지원하지 않는 이유는 
 
-kubernetes의 default container runtime 이었던 docker 가 v1.20 부터 deprecated 되었다
+docker가 **CRI(Container Runtime Interface)** 를 구현하지 않았고, kubernetes에서 dockershim으로 변환하는데 비효율적이라고 판단했기 때문이다 
 
-docker를 지원하지 않는 이유는 docker가 CRI(Container Runtime Interface) 를 구현하지 않았고, 
+즉 좀더 자세히 말하자면 kubernetes는 docker 지원을 중단한게 아니라**Kubelet에서 docker-shim의 지원이 Deprecation 되었다고 보는게맞다.**
 
-kubernetes에서 dockershim으로 변환하는데 비효율적이라고 판단했기 때문이다 
-
-즉 좀더 자세히 말하자면 kubernetes는 docker 지원을 중단한게 아니라
-
-**Kubelet에서 docker-shim의 지원이 Deprecation 되었다고 보는게맞다.**
-
-https://ikcoo.tistory.com/189
+(https://ikcoo.tistory.com/189)
 
 
 
@@ -1157,7 +1197,7 @@ https://ikcoo.tistory.com/189
 
 
 
-### 6. Jenkins CI 수행
+### 6. Jenkins CI 수행   
 
 
 
@@ -1166,28 +1206,27 @@ https://ikcoo.tistory.com/189
 ```groovy
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/maven-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-
     node('hello') {
         stage('Get Source') {
             container('maven') {
                 sh"""
-                git clone https://${GIT_TOKEN}@github.com/jssss93/eduTest.git
-                cd eduTest/hello-world-spring/demo
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
                 """
             }
         }
         stage('Build & push') {
             container('podman') {
-                sh """
-                cd eduTest/hello-world-spring/demo
-                podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                podman build -t ${NEXUS_HOST}/test/spring-test:1.0.0 --tls-verify=false . 
-                podman push ${NEXUS_HOST}/test/spring-test:1.0.0  --tls-verify=false
-                """
+                    sh """
+                    cd base-project/sample/hello-world-spring/demo
+                    podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0 --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0  --tls-verify=false
+                    """
             }
         }
     }
@@ -1201,8 +1240,8 @@ podTemplate(label: 'hello',
 ```groovy
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
 
     node('hello') {
@@ -1211,7 +1250,7 @@ podTemplate(label: 'hello',
             container('npm') {
                 //if you need npm build, install ... write here
                 sh"""
-                git clone https://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@github.com/jssss93/eduTest.git
+                git clone https://${GIT_TOKEN}@github.com/jssss93/eduTest.git
                 """
             }
                 
@@ -1238,8 +1277,8 @@ podTemplate(label: 'hello',
 ```groovy
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'python', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/python-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'python', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
 
     node('hello') {

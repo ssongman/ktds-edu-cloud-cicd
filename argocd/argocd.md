@@ -538,16 +538,19 @@ def TAG = new Date().format('yyyyMMddHHmmss')
             }
         }        
 ...
-    	stage('gitOps Update') {
+        stage('gitOps Update') {
             container('podman') {
             sh"""
+            cd base-project/sample/gitops/hello-world-spring
             
-            ...
+            git config --global user.email "jenkins@example.com"
+            git config --global user.name "Jenkins Pipeline"
+  
+            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/flask-test:${TAG}
             
-            kustomize edit set image ${NEXUS_HOST}/test/flask-test:${TAG}
-            
-            ...
-            
+            git add .
+            git commit -am 'update  from Jenkins'
+            git push
             """
             }
         }
