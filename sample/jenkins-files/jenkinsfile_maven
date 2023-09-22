@@ -18,8 +18,8 @@ podTemplate(label: 'hello',
                     sh """
                     cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0 --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
