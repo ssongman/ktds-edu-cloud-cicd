@@ -26,15 +26,7 @@
 
 
 
-# 3. CI/CD ( [문서 보기](./cloud-branch/gitflow-branch.md) )
 
-- CI/CD
-- gitlab 샘플 프로젝트 이해 및 분기
-  - 실습
-  - git clone
-  - git commit push
-  - branch checkout
-  - 
 # 3. Git Flow Branch 전략 ( [문서 보기](./cloud-branch/gitflow-branch.md) )
 
 - 소스코드 형상관리 및 Branch 전략
@@ -45,8 +37,18 @@
   - branch checkout
 
 
+# 4. CI/CD ( [문서 보기](./cicd/CICD.md) )
 
-# 4. Jenkins를 이용한 CI 구성 및 실습 ( [문서 보기](./jenkins/jenkins.md) )
+- CI/CD
+- gitlab 샘플 프로젝트 이해 및 분기
+  - 실습
+  - git clone
+  - git commit push
+  - branch checkout
+
+
+
+# 5. Jenkins를 이용한 CI 구성 및 실습 ( [문서 보기](./jenkins/jenkins.md) )
 - Jenkins란?
 - 사전준비
   - K8S Resource
@@ -58,7 +60,7 @@
 
 
 
-# 5. ArgoCD를 이용한 CD 구성 및 실습 ( [문서 보기](./argocd/argocd.md) )
+# 6. ArgoCD를 이용한 CD 구성 및 실습 ( [문서 보기](./argocd/argocd.md) )
 - ArgoCD란?
 - 사전준비
   - GitOps
