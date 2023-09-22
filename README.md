@@ -39,14 +39,10 @@
 
 # 4. CI/CD ( [문서 보기](./cicd/CICD.md) )
 
-- CI/CD
-- gitlab 샘플 프로젝트 이해 및 분기
-  - 실습
-  - git clone
-  - git commit push
-  - branch checkout
-
-
+- CI/CD 개요
+- CI/CD 의미
+- CI/CD 왜 사용해야 하는가?
+  
 
 # 5. Jenkins를 이용한 CI 구성 및 실습 ( [문서 보기](./jenkins/jenkins.md) )
 - Jenkins란?
