@@ -20,7 +20,7 @@ Git 소스가 변경 된 것을 감지하면 Sync를 맞춰줌으로서 변경�
 
 `ArgoCD`는 `GitOps` 방식으로 관리되는 `Manifest(yaml)` 파일의 변경사항을 감시하며, `현재 배포된 환경의 상태`와 `Github/Gitlab Repository Manifest 파일`에 정의된 상태를 동일하게 유지하는 역할을 수행합니다.
 
-![img](asset\argocd\image.png)
+![img](asset\argocd\image.webp)
 
 
 
