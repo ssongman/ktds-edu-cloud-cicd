@@ -926,8 +926,8 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
 --set persistence.enabled=false \
 --set agent.resources.requests.cpu=1024m \
 --set agent.resources.requests.memory=1024Mi \
---set agent.resources.limit.cpu=1024m \
---set agent.resources.limit.memory=1024Mi
+--set agent.resources.limits.cpu=1024m \
+--set agent.resources.limits.memory=1024Mi
 
 #helm chart delete
 $ helm -n ${USER_IDENTITY} delete jenkins
@@ -1224,14 +1224,22 @@ podTemplate(label: 'hello',
                     sh """
                     cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0 --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
     }
 }
 ```
+
+빌드 결과
+
+![image-20230923014502459](asset/jenkins/image-20230923014502459.png)
+
+
+
+---
 
 
 
@@ -1240,35 +1248,38 @@ podTemplate(label: 'hello',
 ```groovy
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-
     node('hello') {
         stage('Get Source') {
-            
             container('npm') {
-                //if you need npm build, install ... write here
                 sh"""
-                git clone https://${GIT_TOKEN}@github.com/jssss93/eduTest.git
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
-                
         }
         stage('Build & push') {
             container('podman') {
-                sh """
-                
-                cd eduTest/hello-world-express
-                podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                podman build -t ${NEXUS_HOST}/test/npm-test:1.0.0 --tls-verify=false . 
-                podman push ${NEXUS_HOST}/test/npm-test:1.0.0  --tls-verify=false
-                """
+                    sh """
+                    cd base-project/sample/hello-world-express
+                    podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0  --tls-verify=false
+                    """
             }
         }
     }
 }
 ```
+
+빌드결과
+
+![image-20230923014554545](asset/jenkins/image-20230923014554545.png)
+
+
+
+---
 
 
 
@@ -1277,35 +1288,38 @@ podTemplate(label: 'hello',
 ```groovy
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'python', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.3', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-
     node('hello') {
-        stage('python stage') {
-            
-            container('python') {
-                //if you need npm buil, install ... write here
+        stage('Get Source') {
+            container('flask') {
                 sh"""
-                git clone https://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@github.com/jssss93/eduTest.git
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
         }
-        stage('Get Source & push') {
+        stage('Build & push') {
             container('podman') {
-                sh """
-                cd eduTest/hello-world-flask
-                podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                podman build -t ${NEXUS_HOST}/test/flask-test:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
-                podman push ${NEXUS_HOST}/test/flask-test:1.0.0  --tls-verify=false
-                """
+                    sh """
+                    cd base-project/sample/hello-world-flask
+                    podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
+                    """
             }
         }
     }
 }
 ```
 
+빌드결과
 
+![image-20230923020622987](asset/jenkins/image-20230923020622987.png)
+
+
+
+---
 
 
 
@@ -1352,17 +1366,43 @@ cron은 유닉스계열 컴퓨터 운영체제의 시간 기반 잡 스케줄러
 
 
 
+---
+
+
+
 #### 7.2 WebHook
 
-gitlab plugin download
+**Jenkins Pipeline 설정**
 
-설정 -> 
+**Build Triggers -> BuildWhen a change pushed to GitLab** 
+
+**고급 -> Secret token -> Generate**
+
+![image-20230923021138257](asset/jenkins/image-20230923021138257.png)
 
 Build Triggers -> Build When ~!~~고급 토큰발급
 
-Gitlab Proejct Settings -> Webhook -> URL/Token  입력
+![image-20230923021507892](asset/jenkins/image-20230923021507892.png)
 
-Push 테스트.
+Add new webhook
+
+![image-20230923021406848](asset/jenkins/image-20230923021406848.png)
+
+**Gitlab Proejct Settings -> Webhook -> URL/Token  입력**
+
+![image-20230923021727138](asset/jenkins/image-20230923021727138.png)
+
+
+
+Push 요청 -> Jenkins Build 확인
+
+![image-20230923021925981](asset/jenkins/image-20230923021925981.png)
+
+
+
+---
+
+
 
 
 
@@ -1454,11 +1494,3 @@ https://velog.io/@borab/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-docker-%EC
 https://naleejang.tistory.com/227
 https://ikcoo.tistory.com/189
 ```
-
-
-
-gitlab 초기세팅시 External URL 설정
-
-![image-20230920083955917](asset/jenkins/image-20230920083955917.png)
-
-![image-20230920084107707](asset/jenkins/image-20230920084107707.png)
