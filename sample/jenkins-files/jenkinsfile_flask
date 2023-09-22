@@ -1,43 +1,24 @@
-def TAG = new Date().format('yyyyMMddHHmmss')
-
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/flask-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node('hello') {
         stage('Get Source') {
             container('flask') {
                 sh"""
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/${USER_IDENTITY}.git
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/base-project/${USER_IDENTITY}.git
                 """
             }
         }
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/sample/hello-world-flask
+                    cd base-project/sample/hello-world-flask
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-test:${TAG} --cgroup-manager=cgroupfs --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-test:${TAG}  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
                     """
-            }
-        }
-        
-        stage('gitOps Update') {
-            container('podman') {
-            sh"""
-            cd ${USER_IDENTITY}/sample/gitops/hello-world-flask
-            
-            git config --global user.email "jenkins@example.com"
-            git config --global user.name "Jenkins Pipeline"
-  
-            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/flask-test:${TAG}
-            
-            git add .
-            git commit -am 'update  from Jenkins'
-            git push
-            """
             }
         }
     }
