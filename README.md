@@ -26,7 +26,15 @@
 
 
 
+# 3. CI/CD ( [문서 보기](./cloud-branch/gitflow-branch.md) )
 
+- CI/CD
+- gitlab 샘플 프로젝트 이해 및 분기
+  - 실습
+  - git clone
+  - git commit push
+  - branch checkout
+  - 
 # 3. Git Flow Branch 전략 ( [문서 보기](./cloud-branch/gitflow-branch.md) )
 
 - 소스코드 형상관리 및 Branch 전략
