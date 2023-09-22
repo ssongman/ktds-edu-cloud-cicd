@@ -900,7 +900,72 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 1. Local Repository 에서 git-flow를 초기화한다.
 
+   
 
+2. 각 개발자는 배정받은 feature를 개발하고 Remote Repository를 Pull 하여 Sync를 최대한 맞춘 후,
+   Local Repository의 feature Branch를 Remote Repository에 push하고 develop Branch에 Pull Request(optional)한다. 
+
+   
+
+3. Release준비가 다 되면 배포담당자(or 전담개발자)는 Remote Repository의 develop Branch에 PR된 목록중 Release 대상인 PR만 추려 Merge한다.
+   Release준비가 다 된 develop Branch 로부터 Jenkins를 통해 Containerizing을 수행하여 이미지화 한다. 
+   만들어진 이미지를 가지고 ArgoCD를 통해 DEV 환경에 배포하고 각 feature를 담당한 개발자들이 DEV환경에 접속하여 테스트한다.
+   DEV 에서 점검이 끝나면 ArgoCD를 통해 환경별(AIT-RAT)로 배포하며 테스트한다 
+
+   
+
+4. 환경별 테스트 도중 결함 발생 시 Remote Repository의 release branch로부터 bugfix branch를 checkout 하여 수정 후 remote repository의 release Branch 로 Push 한다.
+   이때 형상이 바뀌기 때문에 Jenkins로부터 Containerizing을 다시 한다. 이때 이미지의 태깅 또한 update되며 첫 테스트 단계인 AIT 부터 다시 테스트 한다.
+
+   
+
+5. RAT 단계까지 테스트가 완료되면 release branch를 finish하여 master branch와 develop branch에 merge 한다.
+   이때 ArgoCD-PRD는 master-brach를 바라보고 있게 설정하여 Sync 기능을 통해 PRD환경에 배포한다.
+
+   
+
+6. 배포와 동시에 master-branch로부터 TAG를 하여 remote Repository에 해당버전을 tagging한다.
+   운영도중 결함이 발생되면 hotfix branch를 remote Repository로 부터 checkout하여 수정 후 master,develop Branch 에 merge한다.
+   형상 또한 바뀌므로 Jenkins를 통해 다시한번 Containerizing하여 배포한다.
+
+
+
+- feature Branch에서 Remote Repository의 develop Branch에 PR(Pull Request)하는 과정은 Optional 하며 코드리뷰, Commit 흐름, 배포되는 기능 구분, 휴먼에러 감소 등을 위함 
+- 각 개발자들이 각자의 feature를 가지고 DEV 환경(Cluster)에 배포하여 테스트하는것 또한 Optional하다.
+
+
+
+
+
+
+
+
+
+####  < ICIS-TR Project Versioning >
+
+| **선도개발**         | **본구축 1차**        | **본구축 2차**        | **안정화~ITO** | **비고**              |                       |           |           |           |           |           |           |           |           |           |                                |
+| -------------------- | --------------------- | --------------------- | -------------- | --------------------- | --------------------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ------------------------------ |
+| M1~M6                | M7~M11                | M12~M15               | M16~M19        | M20~M23               | M24                   | M27       | M29       |           |           |           |           |           |           |           |                                |
+| 분석/설계            | Iteration #1          | Iteration #2          | Iteration #3   | Iteration #4          | SIT, SPT, ORT         | 업무전환  |           |           |           |           |           |           |           |           |                                |
+| **DEV**              | **DEV**               | **AIT**               | **DEV**        | **mSIT**              | **AIT**               | **DEV**   | **AIT**   | **mSIT**  | **DEV**   | **AIT**   | **mSIT**  | **SIT**   | **UAT**   | **PRD**   |                                |
+| **0.0.9**            | **0.1.x**             | **0.1.x**             | **0.2.x**      | **0.2.0**             | **0.2.1**             | **0.3.x** | **0.3.x** | **0.3.x** | **0.4.x** | **0.4.x** | **0.4.x** | **0.5.x** | **0.6.x** | **1.0.0** |                                |
+| develop 202210311041 | B: develop T: 일시    |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | develop 일시          |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | release/0.1.0 0.1.0.0 | release/0.1.0 0.1.0.0 |                | release/0.2.0 0.2.0.0 | release/0.2.1 0.2.1.0 |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       | release/0.1.0 0.1.0.1 |                | release/0.2.0 0.2.0.1 | release/0.2.1 0.2.1.1 |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       | release/0.1.0 0.1.0.2 |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | develop 일시          |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | develop 일시          |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | release/0.1.1 0.1.1.0 | release/0.1.1 0.1.1.0 |                |                       |                       |           |           |           |           |           |           |           |           |           | Critical 결함발생시 patch증가  |
+|                      |                       |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      | release/0.1.4 0.1.4.0 | release/0.1.4 0.1.4.0 |                |                       |                       |           |           |           |           |           |           |           |           |           | Critical 결함발생시 patch 증가 |
+|                      |                       |                       |                |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       | develop 일시   |                       |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       | release/0.2.0  | release/0.2.0         |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       |                | release/0.2.1         |                       |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       |                | release/0.2.2         | release/0.2.2, master |           |           |           |           |           |           |           |           |           |                                |
+|                      |                       |                       |                |                       |                       | ...       | ...       | ...       | ...       | ..        | ..        | ..        | ..        | ..        |                                |
 
 
 
