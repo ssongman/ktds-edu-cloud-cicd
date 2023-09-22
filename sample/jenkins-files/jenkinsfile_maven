@@ -2,15 +2,15 @@ def TAG = new Date().format('yyyyMMddHHmmss')
 
 podTemplate(label: 'hello',
 	containers: [
-        containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node('hello') {
         stage('Get Source') {
             container('maven') {
                 sh"""
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/${USER_IDENTITY}.git
-                cd ${USER_IDENTITY}/sample/hello-world-spring/demo
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
                 """
             }
@@ -18,10 +18,10 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/sample/hello-world-spring/demo
+                    cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:${TAG} --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:${TAG}  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0 --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-test:1.0.0  --tls-verify=false
                     """
             }
         }
@@ -29,7 +29,7 @@ podTemplate(label: 'hello',
         stage('gitOps Update') {
             container('podman') {
             sh"""
-            cd ${USER_IDENTITY}/sample/gitops/hello-world-spring
+            cd base-project/sample/gitops/hello-world-spring
             
             git config --global user.email "jenkins@example.com"
             git config --global user.name "Jenkins Pipeline"
