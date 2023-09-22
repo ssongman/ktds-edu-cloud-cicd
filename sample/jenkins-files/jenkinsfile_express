@@ -9,17 +9,17 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('npm') {
                 sh"""
-                git clone https://${GIT_TOKEN}@github.com/jssss93/eduTest.git
+                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/${USER_IDENTITY}.git
                 """
             }
         }
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd eduTest/hello-world-express
+                    cd ${USER_IDENTITY}/sample/hello-world-express
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/test/express-test:${TAG} --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/test/express-test:${TAG}  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/express-test:${TAG} --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/express-test:${TAG}  --tls-verify=false
                     """
             }
         }
@@ -27,12 +27,12 @@ podTemplate(label: 'hello',
         stage('gitOps Update') {
             container('podman') {
             sh"""
-            cd eduTest/gitops/hello-world-express
+            cd ${USER_IDENTITY}/sample/gitops/hello-world-express
             
             git config --global user.email "jenkins@example.com"
             git config --global user.name "Jenkins Pipeline"
   
-            kustomize edit set image ${NEXUS_HOST}/test/express-test:${TAG}
+            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/express-test:${TAG}
             
             git add .
             git commit -am 'update  from Jenkins'

@@ -362,8 +362,8 @@ e66ecbfeda0c7c37211bd3c18755b56c8344f88a5d265d966b1aec11ab7877c0
 $ curl localhost:8080
 Hello Spring World
 
-$ docker tag spring-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/spring-test:1.0.0
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/spring-test:1.0.0
+$ docker tag spring-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-test:1.0.0
+$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-test:1.0.0
 
 ```
 
@@ -423,9 +423,9 @@ CONTAINER ID   IMAGE                COMMAND                  CREATED            
 $ curl localhost:3000
 Hello Express World
 
-$ docker tag express-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test:1.0.0
+$ docker tag express-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-test:1.0.0
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test:1.0.0
+$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-test:1.0.0
 1.0.0: digest: sha256:b93ce4d64616e232916dbbf8938921b42a72de64652069e2b3ff89d26e54a219 size: 2836
 
 ```
@@ -495,7 +495,7 @@ Hello Flask World
 
 $ docker tag flask-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test:1.0.0
 $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-test]
+The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test]
 22e8ae1c18ff: Pushed
 865a5ae0c9f4: Pushed
 96eb9fd00fa3: Pushed
@@ -513,23 +513,7 @@ ce0f4c80e9b7: Pushed
 
 ---
 
-#### 2.3 Gitab Upload
-
-```
-rm -rf .git
-
-git init 
-git remote -v
-
-```
-
-
-
----
-
-
-
-#### 2.4 베이스 이미지 업로드
+#### 2.3 베이스 이미지 업로드
 
 kustomize 다운로드 URL : https://github.com/kubernetes-sigs/kustomize
 
@@ -858,6 +842,11 @@ jenkins/templates/tests/test-config.yaml
 jenkins/CHANGELOG.md
 jenkins/README.md
 jenkins/VALUES_SUMMARY.md
+
+#TimeZone 설정
+$ vi values.yaml
+
+javaOpts: "-Duser.timezone=Asia/Seoul"
 ```
 
 #### 3.1 Helm Install 
@@ -876,7 +865,10 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
 --set serviceAccount.create=false \
 --set serviceAccount.name=jenkins-admin \
 --set persistence.enabled=false \
---set controller.javaOpts = -Duser.timezone=Asia/Seoul
+--set agent.resources.requests.cpu=1024m \
+--set agent.resources.requests.memory=1024Mi \
+--set agent.resources.limit.cpu=1024m \
+--set agent.resources.limit.memory=1024Mi
 
 #helm chart delete
 $ helm -n nexus delete jenkins
@@ -1012,7 +1004,9 @@ Jenkins 관리 -> System 이동
 
 **Jenkins Job 생성**(1) - Pipeline Script from SCM
 
-![image-20230916210050782](asset/jenkins/image-20230916210050782.png)
+![image-20230922175504198](asset/jenkins/image-20230922175504198.png)
+
+
 
 **Jenkins Job 생성**(2) - Pipeline
 
@@ -1080,13 +1074,7 @@ podTemplate(label: 'hello',
 
 
 
----
-
-
-
-### 6. Jenkins CI 수행 TODO 빌드 수행 결과 
-
-#### 6.1 Dockerfile build 용 podman JenkinsFile
+#### 5.4 podman JenkinsFile
 
 ```groovy
 //podTemplate(label: label, serviceAccount: G_SA, namespace: G_NAMESPACE){
@@ -1104,6 +1092,72 @@ podTemplate(label: 'hello',
     }
 }
 ```
+
+
+
+### Docker? Podman? 
+
+Podman은 Pod Manager Tool 이라는 의미로 OCI  컨테이너를 개발하고 관리하고 실행하도록 도와주는 컨테이너 엔진이다. Red Hat Enterprise Linux 8 과 CentOS8부터는 Docker 대신 Podman을 제공하고 있다. 
+
+
+
+Docker는 애플리케이션을 빌드하고 컨테이너화하기 위한 **Docker Engine**, 컨테이너 이미지를 배포하고 제공하기 위한 Docker Registry, 여러개의 컨테이너 애플리케이션을 정의하고 실행하기 위한 Docker Compose, 사용자의 로컬 컴퓨터나 클라우드 인스턴스에 도커 호스트를 구성해주는 Docker Machine, 컨테이너 클러스터링 및 스케줄링을 위한 Docker Swarm으로 구성됩니다. **Podman은 Docker의 핵심 기능인 Docker Engine 기능과 유사하다고 볼 수 있습니다**. 
+
+
+
+![img](asset/jenkins/i11mg.png)
+
+
+
+Docker Engine에는 컨테이너 이미지를 관리하고, 컨테이너 이미지를 이용해 컨테이너를 실행하기 위한 Docker daemon이 있습니다. 그리고, 이미지와 컨테이너를 사용자가 관리하고 사용할 수 있도록 커맨드 기반으로 된 Docker Client가 있습니다. Podman 역시 컨테이너를 실행하기 위한 컨테이너 이미지, 그리고, 이미지를 통해 실행된 컨테이너와 이를 사용하기 위한 커맨드 기반의 유틸리티가 있습니다. 
+
+
+
+![img](asset/jenkins/im3333g.png)
+
+
+
+Docker는 컨테이너 레지스트리로부터 이미지를 받아와 Docker 내부의 이미지 저장소에 저장을 합니다. 그리고, 이미지 저장소에 저장된 이미지를 이용하여 컨테이너를 실행할 수 있으며, 실행 중인 컨테이너를 이미지로 빌드할 수도 있습니다. Docker는 이런 **다양한 작업들을 Docker daemon을 통해 수행**합니다. 그렇기 때문에 데몬에 문제가 발생했을 경우 모든 컨테이너와 이미지에 영향이 가며, 커맨드 명령어로 컨테이너를 제어할 때도 영향을 미칩니다. 
+
+
+
+![img](asset/jenkins/im2222222g.png)
+
+
+
+반면에 Podman은 daemon 없이 커맨드로 컨테이너 레지스트리로부터 이미지를 받아와 Podman 호스트의 로컬 이미지 저장소에 이미지를 저장하고, 해당 이미지를 이용하여 컨테이너를 실행합니다. 이때 podman 라이브러리를 통해 바로 컨테이너를 실행하기 때문에 컨테이너 간에 서로 영향을 주지 않으며, 컨테이너와 이미지 사이, 커맨드 명령어로 컨테이너를 제어하거나 이미지를 관리할 때도 서로 영향을 주지 않습니다.
+
+
+
+즉 Podman은 컨테이너 및 컨테이너 이미지를 실행하고 관리 할 수 있다. docker와 동일한 기능과 명령 옵션의 대부분을 지원하지만 차이점은 podman은 docker 또는 다른 활성 컨테이너 런타임이 필요하지 않다는 것이다.
+
+
+
+**kubernetes docker 지원 중단이슈**
+
+현재 Docker는 Mirantis(미란티스)가 인수해서 cri-docker를 지원함.
+
+kubernetes의 default container runtime 이었던 docker 가 v1.20 부터 deprecated 되었다
+
+docker를 지원하지 않는 이유는 docker가 CRI(Container Runtime Interface) 를 구현하지 않았고, 
+
+kubernetes에서 dockershim으로 변환하는데 비효율적이라고 판단했기 때문이다 
+
+즉 좀더 자세히 말하자면 kubernetes는 docker 지원을 중단한게 아니라
+
+**Kubelet에서 docker-shim의 지원이 Deprecation 되었다고 보는게맞다.**
+
+https://ikcoo.tistory.com/189
+
+
+
+
+
+---
+
+
+
+### 6. Jenkins CI 수행
 
 
 
@@ -1222,13 +1276,13 @@ podTemplate(label: 'hello',
 
 ![image-20230916210149032](asset/jenkins/image-20230916210149032.png)
 
+Jenkins 의 Schedule 기능은 Linux 의 Crontab 형식을 취한다.
 
+**Cron 이란?**
 
-소프트웨어 유틸리티 **cron**은 유닉스계열 컴퓨터 운영체제의 시간 기반 잡 스케줄러이다. 
+cron은 유닉스계열 컴퓨터 운영체제의 시간 기반 잡 스케줄러이다. 
 
 소프트웨어 환경을 설정하고 관리하는 사람들은 작업을 고정된 시간, 날짜, 간격에 주기적으로 실행할 수 있도록 스케줄링하기 위해 cron을 사용한다.
-
-
 
 ```
 # 매일 낮 2시 15분에 실행
@@ -1357,6 +1411,9 @@ https://github.com/datawire/hello-world-python
 https://www.jenkins.io/doc/book/installing/kubernetes/
 https://hungc.tistory.com/79
 https://help.iwinv.kr/manual/read.html?idx=582
+https://velog.io/@borab/%EC%BF%A0%EB%B2%84%EB%84%A4%ED%8B%B0%EC%8A%A4-docker-%EC%A7%80%EC%9B%90-%EC%A4%91%EB%8B%A8%EC%97%90-%EB%94%B0%EB%A5%B8-%EB%8C%80%EC%95%88
+https://naleejang.tistory.com/227
+https://ikcoo.tistory.com/189
 ```
 
 
