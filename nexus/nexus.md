@@ -1,6 +1,6 @@
 ### 1. Nexus 란?
 
-![post-thumbnail](.\asset\nexus\image222.png)
+![post-thumbnail](asset/nexus/image222.png)
 
 - Sonatype 에서 만든 저장소 관리자 프로젝트
 - `사설 레포지토리`
@@ -92,7 +92,7 @@ spec:
 - password 확인
 
   > cat `/nexus-data/admin.password`
-  > ![img](.\asset\nexus\image2.png)
+  > ![img](asset/nexus/image2.png)
 
 ### 3. nexus  설정
 
@@ -102,9 +102,9 @@ spec:
 > http://기동한 서버도메인주소.nip.io/
 > ```
 
-![img](.\asset\nexus\image3.png)
-![img](.\asset\nexus\image4.png)
-![img](.\asset\nexus\image5.png)
+![img](asset/nexus/image3.png)
+![img](asset/nexus/image4.png)
+![img](asset/nexus/image5.png)
 
 *****
 
@@ -112,13 +112,13 @@ spec:
 
 톱니바퀴 > Repository > Blob Stores > Create blob store
 docker-hosted 와 docker-hub 2개 생성이 필요합니다.
-![img](.\asset\nexus\Fregistry008.png)
+![img](asset/nexus/Fregistry008.png)
 
 Name : docker-hosted
-![img](.\asset\nexus\Fregistry009.png)
+![img](asset/nexus/Fregistry009.png)
 
 Name : docker-hub
-![img](.\asset\nexus\Fregistry010.png)
+![img](asset/nexus/Fregistry010.png)
 
 
 
@@ -128,15 +128,15 @@ Name : docker-hub
 
 톱니바퀴 > Repository > Repositories > Create repository
 docker-hosted 와 docker-hub 2개 생성이 필요합니다.
-![img](.\asset\nexus\Fregistry011.png)
+![img](asset/nexus/Fregistry011.png)
 docker (hosted) 선택
 
 - Name은 docker-hosted
 - HTTP 영역 체크 및 5000 입력
 - Enable Docker V1 API 체크
 - Blob store docker-hosted 선택
-  ![img](.\asset\nexus\Fregistry012.png)
-  ![img](.\asset\nexus\Fregistry013.png)
+  ![img](asset/nexus/Fregistry012.png)
+  ![img](asset/nexus/Fregistry013.png)
 
 docker (proxy) 선택
 
@@ -144,8 +144,8 @@ docker (proxy) 선택
 - Enable Docker V1 API 체크
 - Remote storage 에 `https://registry-1.docker.io` 입력
 - Use Docker Hub 선택
-  ![img](.\asset\nexus\Fregistry014.png)
-  ![img](.\asset\nexus\Fregistry015.png)
+  ![img](asset/nexus/Fregistry014.png)
+  ![img](asset/nexus/Fregistry015.png)
 
 
 
@@ -156,8 +156,8 @@ docker (proxy) 선택
 #### 3.4 Nexus 에서 Realms 설정
 
 톱니바퀴 > Realms > `Docker Bearer Token Realm` Active로 이동 > Save
-![img](.\asset\nexus\Fregistry017.png)
-![img](.\asset\nexus\Fregistry018.png)
+![img](asset/nexus/Fregistry017.png)
+![img](asset/nexus/Fregistry018.png)
 
 
 
@@ -295,10 +295,10 @@ v20200205: digest: sha256:edafc0a0fb057813850d1ba44014914ca02d671ae247107ca70c94
 1) Nexus 웹으로 접속 [http://182.252.133.70:8081](http://182.252.133.70:8081/)
 
 Browse > docker-hosted
-![img](.\asset\nexus\Fregistry020.png)
+![img](asset/nexus/Fregistry020.png)
 
 tag 확인
-![img](.\asset\nexus\Fregistry021.png)
+![img](asset/nexus/Fregistry021.png)
 
 사내 저장소에서 pull 받기
 
@@ -398,7 +398,7 @@ $ vi /etc/docker/daemon.json
 
 Windows 계열
 
-![image-20230915231051812](.\asset\nexus\image-20230915231051812.png)
+![image-20230915231051812](asset/nexus/image-20230915231051812.png)
 
 
 

@@ -1,6 +1,6 @@
-### 1. Jenkins 란?
+### 1. Jenkins 란?asset/jenkins/
 
-![img](asset\jenkins\img.jpg)
+![img](asset/jenkins/img.jpg)
 
 
 
@@ -108,7 +108,7 @@ c. 빌드의 결과물은 Nexus Image Repository에 Push된다. (이미지 Tag�
 - Job에 비해서 slave가 적으면 비효율적임(slave가 부족해서 기다리는 job이 많아짐)
 - 즉, Job이 늘어나고 줄어듦에 따라 Jenkins slave를 늘리거나 줄여야하는(사람이 직접 설치해야하는) 단점
 
-![image-20230918180409621](asset\jenkins\image-20230918180409621.png)
+![image-20230918180409621](asset/jenkins/image-20230918180409621.png)
 
 
 
@@ -126,7 +126,7 @@ Cluster 환경에서 Kubernetes Plugin 적용 후 아래와 같은 이점이 생
 
 ##### 젠킨스(with kubernetes plugin) 파이프라인 생명주기
 
-![img](asset\jenkins\991EA9445B2F372827)
+![img](asset/jenkins/991EA9445B2F372827)
 
 1. Jenkins(with kubernetes plugin) master에게 Jenkins job 수행요청
 2. Jenkins master는 kubernetes에게 slave를 생성하도록 선언
@@ -533,11 +533,11 @@ git remote -v
 
 kustomize 다운로드 URL : https://github.com/kubernetes-sigs/kustomize
 
-![image-20230916011132592](asset\jenkins\image-20230916011132592.png)
+![image-20230916011132592](asset/jenkins/image-20230916011132592.png)
 
 압축 해제 후 Dockerfile 과 동일한 경로에 위치.
 
-![image-20230916011301955](asset\jenkins\image-20230916011301955.png)
+![image-20230916011301955](asset/jenkins/image-20230916011301955.png)
 
 **podman build-tool**
 
@@ -898,7 +898,7 @@ $ helm -n nexus delete jenkins
 
 Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
-![image-20230918211841802](asset\jenkins\image-20230918211841802.png)
+![image-20230918211841802](asset/jenkins/image-20230918211841802.png)
 
 
 
@@ -906,17 +906,17 @@ Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
 **Jenkins 관리로 이동**
 
-![](asset\jenkins\image-20230916200438207.png)
+![](asset/jenkins/image-20230916200438207.png)
 
 **Plugins 관리 이동**
 
-![image-20230916201049526](asset\jenkins\image-20230916201049526.png)
+![image-20230916201049526](asset/jenkins/image-20230916201049526.png)
 
 **Plugin Update**
 
 전체선택 후 Update 클릭
 
-![image-20230918212051456](asset\jenkins\image-20230918212051456.png)
+![image-20230918212051456](asset/jenkins/image-20230918212051456.png)
 
 #### 4.2 Git-Token 발급 
 
@@ -924,15 +924,15 @@ Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
 http://gitlab.35.209.207.26.nip.io/
 
-![image-20230919090743189](asset\jenkins\image-20230919090743189.png)
+![image-20230919090743189](asset/jenkins/image-20230919090743189.png)
 
-![image-20230919090855977](asset\jenkins\image-20230919090855977.png)
+![image-20230919090855977](asset/jenkins/image-20230919090855977.png)
 
-![image-20230919091107663](asset\jenkins\image-20230919091107663.png)
+![image-20230919091107663](asset/jenkins/image-20230919091107663.png)
 
 
 
-![image-20230919091158245](asset\jenkins\image-20230919091158245.png)
+![image-20230919091158245](asset/jenkins/image-20230919091158245.png)
 
 glpat-oLxyZ61UkuB9ysz6nw8T
 
@@ -944,17 +944,17 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 **Generate new Token**
 
-![image-20230916201904004](asset\jenkins\image-20230916201904004.png)
+![image-20230916201904004](asset/jenkins/image-20230916201904004.png)
 
 **Select Scopes**
 
-![image-20230916204106190](asset\jenkins\image-20230916204106190.png)
+![image-20230916204106190](asset/jenkins/image-20230916204106190.png)
 
 
 
 **Token 저장**
 
-![image-20230918151331800](asset\jenkins\image-20230918151331800.png)
+![image-20230918151331800](asset/jenkins/image-20230918151331800.png)
 
 
 
@@ -962,17 +962,17 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 **Jenkins관리 -> System 이동**
 
-![image-20230916205042219](asset\jenkins\image-20230916205042219.png)
+![image-20230916205042219](asset/jenkins/image-20230916205042219.png)
 
 
 
 **global-> Add Credeitnals 이동**
 
-![image-20230916205235031](asset\jenkins\image-20230916205235031.png)
+![image-20230916205235031](asset/jenkins/image-20230916205235031.png)
 
 **정보입력**
 
-![image-20230916205539590](asset\jenkins\image-20230916205539590.png)
+![image-20230916205539590](asset/jenkins/image-20230916205539590.png)
 
 
 
@@ -988,11 +988,11 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 Jenkins 관리 -> System 이동
 
-![image-20230916204620570](asset\jenkins\image-20230916204620570.png)
+![image-20230916204620570](asset/jenkins/image-20230916204620570.png)
 
 **Global Properties 설정**(스크롤하여 Global Properties 확인)
 
-![image-20230918143337804](asset\jenkins\image-20230918143337804.png)
+![image-20230918143337804](asset/jenkins/image-20230918143337804.png)
 
 
 
@@ -1004,19 +1004,19 @@ Jenkins 관리 -> System 이동
 
 **새로운Item 이동**
 
-![image-20230918182630127](asset\jenkins\image-20230918182630127.png)
+![image-20230918182630127](asset/jenkins/image-20230918182630127.png)
 
 **Pipeline Name 입력 -> Pipeline 선택 -> OK 클릭**
 
-![image-20230918182822928](asset\jenkins\image-20230918182822928.png)
+![image-20230918182822928](asset/jenkins/image-20230918182822928.png)
 
 **Jenkins Job 생성**(1) - Pipeline Script from SCM
 
-![image-20230916210050782](asset\jenkins\image-20230916210050782.png)
+![image-20230916210050782](asset/jenkins/image-20230916210050782.png)
 
 **Jenkins Job 생성**(2) - Pipeline
 
-![image-20230918183020333](asset\jenkins\image-20230918183020333.png)
+![image-20230918183020333](asset/jenkins/image-20230918183020333.png)
 
 
 
@@ -1220,7 +1220,7 @@ podTemplate(label: 'hello',
 
 #### 7.1 Schedule
 
-![image-20230916210149032](asset\jenkins\image-20230916210149032.png)
+![image-20230916210149032](asset/jenkins/image-20230916210149032.png)
 
 
 
@@ -1363,6 +1363,6 @@ https://help.iwinv.kr/manual/read.html?idx=582
 
 gitlab 초기세팅시 External URL 설정
 
-![image-20230920083955917](asset\jenkins\image-20230920083955917.png)
+![image-20230920083955917](asset/jenkins/image-20230920083955917.png)
 
-![image-20230920084107707](asset\jenkins\image-20230920084107707.png)
+![image-20230920084107707](asset/jenkins/image-20230920084107707.png)
