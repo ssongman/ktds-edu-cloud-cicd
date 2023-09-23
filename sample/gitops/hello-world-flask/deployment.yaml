@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-flask
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -15,7 +15,7 @@ spec:
         app: hello-flask
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-test:1.0.0
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-spring:1.0.0
         name: hello-flask
         ports:
         - containerPort: 8082

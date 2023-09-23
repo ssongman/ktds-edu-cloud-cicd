@@ -247,7 +247,7 @@ Credential : ${GIT_TOKEN} 입력
 
 ```
 
-${USER_IDENTITY}, ${GIT_TOKEN} 일괄 변경
+**${USER_IDENTITY}, ${GIT_TOKEN} 일괄 변경**
 
 
 
@@ -1213,6 +1213,8 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('maven') {
                 sh"""
+                mkdir ${USER_IDENTITY}
+                cd ${USER_IDENTITY}
                 git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
@@ -1222,7 +1224,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd base-project/sample/hello-world-spring/demo
+                    cd ${USER_IDENTITY}/base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
@@ -1255,6 +1257,8 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('npm') {
                 sh"""
+                mkdir ${USER_IDENTITY}
+                cd ${USER_IDENTITY}
                 git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
@@ -1262,7 +1266,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd base-project/sample/hello-world-express
+                    cd ${USER_IDENTITY}/base-project/sample/hello-world-express
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0  --tls-verify=false
@@ -1295,6 +1299,8 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('flask') {
                 sh"""
+                mkdir ${USER_IDENTITY}
+                cd ${USER_IDENTITY}
                 git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
@@ -1302,7 +1308,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd base-project/sample/hello-world-flask
+                    cd ${USER_IDENTITY}/base-project/sample/hello-world-flask
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
@@ -1404,11 +1410,9 @@ Push 요청 -> Jenkins Build 확인
 
 
 
-
-
 #### 7.3 기본 옵션
 
-General
+**General**
 
 Do not allow concurrent builds
 
@@ -1436,7 +1440,7 @@ Throttle builds
 
 
 
-Trigger
+**Trigger**
 
 Build after other projectes are built
 
@@ -1467,6 +1471,10 @@ SCM에서 변경 사항을 폴링하도록 Jenkins를 구성
 ```
 미리 정의된 특수 URL(스크립트에 편리함)에 액세스하여 새 빌드를 트리거
 ```
+
+
+
+---
 
 
 

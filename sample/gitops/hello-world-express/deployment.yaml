@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-express
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -15,7 +15,7 @@ spec:
         app: hello-express
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test:2.0.2
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins:1.0.0
         name: hello-express
         ports:
         - containerPort: 3000

@@ -7,6 +7,8 @@ podTemplate(label: 'hello',
         stage('Get Source') {
             container('maven') {
                 sh"""
+				mkdir ${USER_IDENTITY}
+				cd ${USER_IDENTITY}
                 git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
@@ -16,7 +18,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd base-project/sample/hello-world-spring/demo
+                    cd ${USER_IDENTITY}/base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false

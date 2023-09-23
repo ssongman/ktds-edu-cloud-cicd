@@ -5,5 +5,5 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test
+- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins
   newTag: 1.0.0

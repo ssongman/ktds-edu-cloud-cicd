@@ -5,5 +5,5 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-test
-  newTag: "20230918052215"
+- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-jenkins
+  newTag: "1.0.0"

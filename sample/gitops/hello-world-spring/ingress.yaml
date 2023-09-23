@@ -2,11 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-world-spring-nexus
-  namespace: nexus
+  namespace: user01
 spec:
   ingressClassName: traefik
   rules:
-  - host: hello-world-spring.nexus.cloud.35.209.207.26.nip.io
+  - host: hello-world-spring.user01.cloud.35.209.207.26.nip.io
     http:
       paths:
       - backend:
