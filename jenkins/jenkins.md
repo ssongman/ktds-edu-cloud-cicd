@@ -1215,7 +1215,7 @@ podTemplate(label: 'hello',
                 sh"""
                 mkdir ${USER_IDENTITY}
                 cd ${USER_IDENTITY}
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
                 """
@@ -1259,7 +1259,7 @@ podTemplate(label: 'hello',
                 sh"""
                 mkdir ${USER_IDENTITY}
                 cd ${USER_IDENTITY}
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
         }
@@ -1301,7 +1301,7 @@ podTemplate(label: 'hello',
                 sh"""
                 mkdir ${USER_IDENTITY}
                 cd ${USER_IDENTITY}
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
         }

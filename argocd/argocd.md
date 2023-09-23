@@ -552,7 +552,7 @@ def TAG = new Date().format('yyyyMMddHHmmss')
         stage('gitOps Update') {
             container('podman') {
             sh"""
-            cd base-project/sample/gitops/hello-world-spring
+            cd ${USER_IDENTITY}/base-project/sample/gitops/hello-world-spring
             
             git config --global user.email "jenkins@example.com"
             git config --global user.name "Jenkins Pipeline"
@@ -560,8 +560,8 @@ def TAG = new Date().format('yyyyMMddHHmmss')
             kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:${TAG}
             
             git add .
-            git commit -am 'update  from Jenkins'
-            git push http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+            git commit -m 'update  from Jenkins'
+            git push http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
             """
             }
         }
@@ -569,21 +569,23 @@ def TAG = new Date().format('yyyyMMddHHmmss')
 
 #### 6.3 변경사항 빌드
 
-
+![image-20230924033608768](asset/argocd/image-20230924033608768.png)
 
 #### 6.4 ArgoCD Sync 
 
 REFRESH -> SYNC -> SYNCHRONIZE
 
-![image-20230918145704332](asset/argocd/image-20230918145704332.png)
+![image-20230924033722820](asset/argocd/image-20230924033722820.png)
+
+
 
 배포 확인
 
-![image-20230918145904510](asset/argocd/image-20230918145904510.png)
+![image-20230924033838763](asset/argocd/image-20230924033838763.png)
 
-![image-20230918145757280](asset/argocd/image-20230918145757280.png)
+![image-20230924033921494](asset/argocd/image-20230924033921494.png)
 
-![image-20230918145929330](asset/argocd/image-20230918145929330.png)
+![image-20230924033951269](asset/argocd/image-20230924033951269.png)
 
 ---
 
