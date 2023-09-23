@@ -845,9 +845,15 @@ git flow 실습자료를 remote 와 연결해 보자.
 
 
 
-### git remote 
+### git repogitory 생성
+
+http://gitlab.35.209.207.26.nip.io/cloud-branch/gitflow-test/edu01.git
 
 
+
+
+
+### git remote
 
 ```sh
 
@@ -893,6 +899,12 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 
 ### git flow branch 전략 흐름도
+
+
+
+![image-20230923213920316](gitflow-branch.assets/image-20230923213920316.png)
+
+
 
 
 
