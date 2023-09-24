@@ -1,15 +1,14 @@
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-    node('hello') {
+    node(label) {
         stage('Get Source') {
             container('maven') {
                 sh"""
-				mkdir ${USER_IDENTITY}
-				cd ${USER_IDENTITY}
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
                 """
@@ -18,12 +17,32 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/base-project/sample/hello-world-spring/demo
+                    cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
+        
+		/*
+        stage('gitOps Update') {
+            container('podman') {
+            sh"""
+            cd base-project/sample/gitops/hello-world-spring
+            
+            git config --global user.email "jenkins@example.com"
+            git config --global user.name "Jenkins Pipeline"
+  
+            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0
+            
+            git add .
+            git commit -am 'update  from Jenkins'
+            git push http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+            """
+            }
+        }
+		*/
     }
 }
+

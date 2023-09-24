@@ -1,27 +1,28 @@
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-    node('hello') {
+    node(label) {
         stage('Get Source') {
             container('flask') {
                 sh"""
-				mkdir ${USER_IDENTITY}
-				cd ${USER_IDENTITY}
-                git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/base-project/${USER_IDENTITY}.git
+                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
         }
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/base-project/sample/hello-world-flask
+                    cd base-project/sample/hello-world-flask
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
+    
     }
 }

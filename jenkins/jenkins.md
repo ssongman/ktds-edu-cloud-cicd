@@ -1061,12 +1061,13 @@ Jenkins 관리 -> System 이동
 #### 5.1 maven 템플릿
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'maven', image: 'maven:alpine', ttyEnabled: true, command: 'cat')
   ]) {
 
-    node('hello') {
+    node(label) {
         stage('Maven') {
             container('maven') {
                     sh 'mvn -version'
@@ -1081,12 +1082,13 @@ podTemplate(label: 'hello',
 #### 5.2 node 템플릿
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'node', image: 'node:18.17.1-alpine3.18', ttyEnabled: true, command: 'cat')
   ]) {
 
-    node('hello') {
+    node(label) {
         stage('node') {
             container('node') {
                     sh 'node --version'
@@ -1101,12 +1103,13 @@ podTemplate(label: 'hello',
 #### 5.3 python 템플릿
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'python', image: 'python:3.11.5-alpine3.18', ttyEnabled: true, command: 'cat')
   ]) {
 
-    node('hello') {
+    node(label) {
         stage('python') {
             container('python') {
                     sh 'python --version'
@@ -1121,13 +1124,13 @@ podTemplate(label: 'hello',
 #### 5.4 podman JenkinsFile
 
 ```groovy
-//podTemplate(label: label, serviceAccount: G_SA, namespace: G_NAMESPACE){
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'podman', image: 'mattermost/podman:1.8.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
 
-    node('hello') {
+    node(label) {
         container('podman') {
 	        stage('build') {   
                     sh 'podman version'
@@ -1204,17 +1207,16 @@ docker가 **CRI(Container Runtime Interface)** 를 구현하지 않았고, kuber
 #### Maven(java) 빌드용 JenkinsFile
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-    node('hello') {
+    node(label) {
         stage('Get Source') {
             container('maven') {
                 sh"""
-                mkdir ${USER_IDENTITY}
-                cd ${USER_IDENTITY}
                 git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
@@ -1224,7 +1226,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/base-project/sample/hello-world-spring/demo
+                    cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
@@ -1233,6 +1235,7 @@ podTemplate(label: 'hello',
         }
     }
 }
+
 ```
 
 빌드 결과
@@ -1248,17 +1251,16 @@ podTemplate(label: 'hello',
 #### Npm(node) 빌드용 JenkinsFile
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-    node('hello') {
+    node(label) {
         stage('Get Source') {
             container('npm') {
                 sh"""
-                mkdir ${USER_IDENTITY}
-                cd ${USER_IDENTITY}
                 git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
@@ -1266,7 +1268,7 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/base-project/sample/hello-world-express
+                    cd base-project/sample/hello-world-express
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0  --tls-verify=false
@@ -1290,17 +1292,17 @@ podTemplate(label: 'hello',
 #### Flask(python) 빌드용 JenkinsFile 
 
 ```groovy
-podTemplate(label: 'hello',
+def label = "hello-${UUID.randomUUID().toString()}"
+
+podTemplate(label: label,
 	containers: [
         containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
         containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
-    node('hello') {
+    node(label) {
         stage('Get Source') {
             container('flask') {
                 sh"""
-                mkdir ${USER_IDENTITY}
-                cd ${USER_IDENTITY}
                 git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
                 """
             }
@@ -1308,15 +1310,17 @@ podTemplate(label: 'hello',
         stage('Build & push') {
             container('podman') {
                     sh """
-                    cd ${USER_IDENTITY}/base-project/sample/hello-world-flask
+                    cd base-project/sample/hello-world-flask
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
                     podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
                     podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
+    
     }
 }
+
 ```
 
 빌드결과
