@@ -2061,11 +2061,64 @@ Summary of actions:
 
 git  브랜치를 넘나드는 작업을 한다는 것은 협업을 위한 작업이므로 remote ropogitory 가 존재해야 한다.
 
-이작업을 위해서 remote 에 empty repo 를 만들고 연결해 보자.
+이 작업을 위해서 remote 에 empty repo 를 연결 및 생성하는 작업을 해보자.
 
 
 
-### (1) git repogitory 생성
+
+
+### (1) git remote
+
+```sh
+
+
+$ cd ~/temp/gitflowtest
+
+
+$ git switch master
+ 
+# origin 이라는 이름을 가진 remote 저장소를 지정
+$ git remote add origin http://gitlab.35.209.207.26.nip.io/root/user01.git
+
+$ git remote -v
+origin  http://gitlab.35.209.207.26.nip.io/root/user01.git (fetch)
+origin  http://gitlab.35.209.207.26.nip.io/root/user01.git (push)
+
+
+
+# 모든 branch 업로드 ( master / develop / 1.0.0 )
+$ git push origin master develop 1.0.0
+
+Enumerating objects: 12, done.
+Counting objects: 100% (12/12), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (12/12), 1.01 KiB | 516.00 KiB/s, done.
+Total 12 (delta 2), reused 0 (delta 0), pack-reused 0
+remote:
+remote: To create a merge request for develop, visit:
+remote:   http://gitlab-c9587ff7c-6l4q4/root/user01/-/merge_requests/new?merge_request%5Bsource_branch%5D=develop
+remote:
+To http://gitlab.35.209.207.26.nip.io/root/user01.git
+ * [new branch]      master -> master
+ * [new branch]      develop -> develop
+ * [new tag]         1.0.0 -> 1.0.0
+
+```
+
+
+
+
+
+### (2) git remote 확인
+
+http://gitlab.35.209.207.26.nip.io/root/user01
+
+
+
+
+
+### (3) git repogitory 생성
 
 
 
@@ -2090,62 +2143,6 @@ git  브랜치를 넘나드는 작업을 한다는 것은 협업을 위한 작�
   * clone 버튼 클릭
     * Clone with HTTP  부분 확인 및 URL Copy
     * http://gitlab.35.209.207.26.nip.io/root/test01.git
-
-
-
-
-
-### (2) git remote
-
-```sh
-
-
-$ cd ~/temp/gitflowtest
-
-
-$ git switch master
- 
-# origin 이라는 이름을 가진 remote 저장소를 지정
-$ git remote add origin http://gitlab.35.209.207.26.nip.io/root/user01.git
-
-$ git remote -v
-origin  http://gitlab.35.209.207.26.nip.io/root/user01.git (fetch)
-origin  http://gitlab.35.209.207.26.nip.io/root/user01.git (push)
-
-
-
-
-# 모든 branch 업로드
-$ git push origin master develop 1.0.0
-
-Enumerating objects: 12, done.
-Counting objects: 100% (12/12), done.
-Delta compression using up to 2 threads
-Compressing objects: 100% (8/8), done.
-Writing objects: 100% (12/12), 1.01 KiB | 516.00 KiB/s, done.
-Total 12 (delta 2), reused 0 (delta 0), pack-reused 0
-remote:
-remote: To create a merge request for develop, visit:
-remote:   http://gitlab-c9587ff7c-6l4q4/root/user01/-/merge_requests/new?merge_request%5Bsource_branch%5D=develop
-remote:
-To http://gitlab.35.209.207.26.nip.io/root/user01.git
- * [new branch]      master -> master
- * [new branch]      develop -> develop
- * [new tag]         1.0.0 -> 1.0.0
-
-```
-
-
-
-
-
-### (3) git remote 확인
-
-http://gitlab.35.209.207.26.nip.io/root/user01
-
-
-
-
 
 
 

@@ -211,30 +211,28 @@ C:\githubrepo\ktds-edu-cloud-cicd\README.md
 
 개인별 VM Server 접속 환경 및 Kafka 실습을 위한 개인 Topic 정보를 확인하자.
 
-|  NO  | 담당자 |        소속         | VM Server | VM Server IP | namespace | 비고 |
-| :--: | :----: | :-----------------: | :-------: | :----------: | :-------: | :--: |
-|  1   | 최종수 | ICIS  Tr 아키텍처팀 | bastion01 | 34.xx.xx.xx  |  user01   |      |
-|  2   | 송양종 | ICIS  Tr 아키텍처팀 | bastion02 | 34.152.18.20 |  user02   |      |
-|  3   | 김수진 | ICIS  Tr 아키텍처팀 | bastion03 |              |  user03   |      |
-|  4   | 백상열 | ICIS  Tr 아키텍처팀 | bastion04 |              |  user04   |      |
-|  5   | 송하영 | ICIS  Tr 아키텍처팀 | bastion05 |              |  user05   |      |
-|  6   | 이도겸 | ICIS  Tr 아키텍처팀 | bastion06 |              |  user06   |      |
-|  7   | 권혜원 |   ICIS  Tr 고객팀   | bastion07 |              |  user07   |      |
-|  8   | 이돈민 |   ICIS  Tr 고객팀   | bastion08 |              |  user08   |      |
-|  9   | 김재혁 |   ICIS  Tr 빌링팀   | bastion09 |              |  user09   |      |
-|  10  | 임성식 |   ICIS  Tr 빌링팀   | bastion10 |              |  user10   |      |
-|  11  | 김명선 |    AICC서비스1팀    | bastion11 |              |  user11   |      |
-|  12  | 서정원 |     고객개발1팀     | bastion12 |              |  user12   |      |
-|  13  | 서현직 |   인프라DX개발팀    | bastion13 |              |  user13   |      |
-|  14  | 양행모 |   고객DX솔루션팀    | bastion14 |              |  user14   |      |
-|  15  | 이병훈 |      DWP개발팀      | bastion15 |              |  user15   |      |
-|  16  | 이승미 |   인프라DX개발팀    | bastion16 |              |  user16   |      |
-|  17  | 이영효 |     고객개발1팀     | bastion17 |              |  user17   |      |
-|  18  | 이지현 |    Rater서비스팀    | bastion18 |              |  user18   |      |
-|  19  | 임지윤 |     AI서비스팀      | bastion19 |              |  user19   |      |
-|  20  | 조민정 |      CRM사업팀      | bastion20 |              |  user20   |      |
-
-
+|  NO  | 담당자 |        소속         | VM Server |  VM Server IP  | namespace | 비고 |
+| :--: | :----: | :-----------------: | :-------: | :------------: | :-------: | :--: |
+|  1   | 최종수 | ICIS  Tr 아키텍처팀 | bastion01 |  34.xx.xx.xx   |  user01   |      |
+|  2   | 송양종 | ICIS  Tr 아키텍처팀 | bastion02 |  34.152.18.20  |  user02   |      |
+|  3   | 김수진 | ICIS  Tr 아키텍처팀 | bastion03 |  34.96.187.14  |  user03   |      |
+|  4   | 백상열 | ICIS  Tr 아키텍처팀 | bastion04 | 35.228.226.185 |  user04   |      |
+|  5   | 송하영 | ICIS  Tr 아키텍처팀 | bastion05 | 34.88.108.153  |  user05   |      |
+|  6   | 이도겸 | ICIS  Tr 아키텍처팀 | bastion06 | 34.176.177.28  |  user06   |      |
+|  7   | 권혜원 |   ICIS  Tr 고객팀   | bastion07 |  35.241.96.72  |  user07   |      |
+|  8   | 이돈민 |   ICIS  Tr 고객팀   | bastion08 | 35.190.230.48  |  user08   |      |
+|  9   | 김재혁 |   ICIS  Tr 빌링팀   | bastion09 | 34.146.60.112  |  user09   |      |
+|  10  | 임성식 |   ICIS  Tr 빌링팀   | bastion10 | 34.64.123.144  |  user10   |      |
+|  11  | 김명선 |    AICC서비스1팀    | bastion11 |  34.22.90.215  |  user11   |      |
+|  12  | 서정원 |     고객개발1팀     | bastion12 |  34.93.97.195  |  user12   |      |
+|  13  | 서현직 |   인프라DX개발팀    | bastion13 | 34.131.56.171  |  user13   |      |
+|  14  | 양행모 |   고객DX솔루션팀    | bastion14 | 34.131.41.241  |  user14   |      |
+|  15  | 이병훈 |      DWP개발팀      | bastion15 | 34.101.72.235  |  user15   |      |
+|  16  | 이승미 |   인프라DX개발팀    | bastion16 |  34.97.214.48  |  user16   |      |
+|  17  | 이영효 |     고객개발1팀     | bastion17 |  34.101.57.43  |  user17   |      |
+|  18  | 이지현 |    Rater서비스팀    | bastion18 |  34.93.114.92  |  user18   |      |
+|  19  | 임지윤 |     AI서비스팀      | bastion19 | 34.129.235.133 |  user19   |      |
+|  20  | 조민정 |      CRM사업팀      | bastion20 |  34.129.61.68  |  user20   |      |
 
 
 
