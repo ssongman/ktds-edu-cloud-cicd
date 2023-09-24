@@ -90,7 +90,7 @@ f. GitOps를 향해 polling을 수행하고 있던 ArgoCD가 변경사항을 감
 #### **GitOps 전략**
 
 깃옵스는 푸시 타입(Push Type)과 풀 타입(Pull Type), 두 가지의 배포 전략을 가이드 하고 있다. 
-어느 이벤트를 트리거로 하여 CD 파이프라인이 동작하는가의 차이이다. 깃옵스를 구현할 때는 보안상의 이유로 풀 타입 배포 전략을 권장하고 있다.
+어느 이벤트를 트리거로 하여 CD 파이프라인이 동작하는가의 차이이다. 깃옵스를 구현할 때는 보안상의 이유로 **Pull Type** 배포 전략을 권장하고 있다.
 
 
 
@@ -100,7 +100,7 @@ f. GitOps를 향해 polling을 수행하고 있던 ArgoCD가 변경사항을 감
 
 Push Type의 깃옵스를 구현한다면 배포 환경과 형상이 달라지는 경우 이에 대한 Notification을 받을 수 있어야 한다. 후술할 Pull Type과 달리 Push Type은 구조적으로 원천에 대한 지속적인 체크가 이루어지지 않기 때문이다. 변경사항이 발생한 것을 확인하였다면 형상을 다시 일치시키는 동작까지도 자동화가 필요하다. 또한 Push 이벤트 한 번이면 배포 환경까지 변경 사항이 발생하기 때문에 중간에 인가 절차도 추가되는 편이 좋다. 한 마디로 손이 많이 간다.
 
-그럼에도 Push Type이 사용되는 이유로는 단순한 아키텍처를 꼽을 수 있다. 지속적으로 레포지토리를 체크할 필요가 없고 Push 이벤트만 옵저빙 하면 되기 때문이다.
+그럼에도 Push Type이 사용되는 이유로는 단순한 아키텍처를 꼽을 수 있다. 지속적으로 레포지토리를 체크할 필요가 없고 Push 이벤트만 Observing 하면 되기 때문이다.
 
 
 
@@ -157,7 +157,7 @@ spec:
 
 ```
 
-**gitops/hello-world-spring/service.yaml**
+**sample/gitops/hello-world-spring/service.yaml**
 
 ```yaml
 apiVersion: v1
@@ -173,7 +173,7 @@ spec:
     app: hello-spring
 ```
 
-**gitops/hello-world-spring/ingress.yaml**
+**sample/gitops/hello-world-spring/ingress.yaml**
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -197,7 +197,7 @@ spec:
 
 ```
 
-**gitops/hello-world-spring/kustomize**
+**sample/gitops/hello-world-spring/kustomize**
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -219,7 +219,7 @@ images:
 
 ##### 2.1.2 hello-world-express
 
-**gitops/hello-world-express/deployment.yaml**
+**sample/gitops/hello-world-express/deployment.yaml**
 
 ```yaml
 apiVersion: apps/v1
@@ -246,7 +246,7 @@ spec:
 
 ```
 
-**gitops/hello-world-express/service.yaml**
+**sample/gitops/hello-world-express/service.yaml**
 
 ```yaml
 apiVersion: v1
@@ -262,7 +262,7 @@ spec:
     app: hello-express
 ```
 
-**gitops/hello-world-express/ingress.yaml**
+**sample/gitops/hello-world-express/ingress.yaml**
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -285,7 +285,7 @@ spec:
         pathType: Prefix
 ```
 
-**gitops/hello-world-express/kustomize**
+**sample/gitops/hello-world-express/kustomize**
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -307,7 +307,7 @@ images:
 
 ##### 2.1.3 hello-world-flask
 
-**gitops/hello-world-flask/deployment.yaml**
+**sample/gitops/hello-world-flask/deployment.yaml**
 
 ```yaml
 apiVersion: apps/v1
@@ -327,14 +327,14 @@ spec:
         app: hello-flask
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-jenkins:1.0.0
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-jenkins:1.0.0
         name: hello-flask
         ports:
         - containerPort: 8082
 
 ```
 
-**gitops/hello-world-flask/service.yaml**
+**sample/gitops/hello-world-flask/service.yaml**
 
 ```yaml
 apiVersion: v1
@@ -350,7 +350,7 @@ spec:
     app: hello-flask
 ```
 
-**gitops/hello-world-flask/ingress.yaml**
+**sample/gitops/hello-world-flask/ingress.yaml**
 
 ```yaml
 apiVersion: networking.k8s.io/v1
@@ -374,7 +374,7 @@ spec:
 
 ```
 
-**gitops/hello-world-flask/kustomize**
+**sample/gitops/hello-world-flask/kustomize**
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -595,62 +595,54 @@ REFRESH -> SYNC -> SYNCHRONIZE
 
 예전에는 수 개월 혹은 수 년에 한 번씩 서비스를 릴리스 했었지만, 최근에는 서비스를 더 작게 만들고(마이크로 서비스) 더 자주 배포(Deployment) 하는 방식으로 변화하고 있습니다. 그만큼 변경 사항이 생겼을 때 더 빠르게 반영할 수 있지만 코드에 손을 대는 것이란 항상 위험이 따르죠. 그렇기 때문에 이에 대응하여 배포 전략을 구성해야합니다.
 
-가장 대표적인 배포 전략은 아래 네 가지가 되는데요. 아마 실제로 검색해보시면 AWS의 서비스들 중 배포 기능을 가진 것들에서 이들 중 하나는 꼭 들어가 있는 것을 볼 수 있을거에요.
-
-- 인플레이스 배포 (In-place Deployment)
 - 롤링 배포 (Rolling Update Deployment)
 - 블루/그린 배포 (Blue/Green Deployment)
 - 카나리 배포 (Canary Deployment)
 
-각 배포 전략마다 장점과 단점이 모두 존재하기 때문에 상황에 따라 전략을 선택해야하는데요. 그럼 바로 각 배포 전략에 대해 알아보도록 하겠습니다.
 
-#### 7.1 인플레이스 배포 (In-place Deployment)
 
-인플레이스 배포는 사용중인 환경에 새로운 변경사항이 포함된 어플리케이션만 반영하는 방법입니다.
+#### 7.1 롤링 배포 (Rolling Update Deployment)
 
-![img](asset/argocd/00be60e9c51ea6bd1d9b670b1b6c2b98-640x311.png)
+롤링 배포란  **이전 버전의 서버는 한대씩 내리고 새롭게 배포한 서버를 한대씩 올려가는 방식이며** 무중단 배포에서 가장 기본적인 방식이라고 할 수 있다.
 
-이 방식을 사용하는 대표적인 서비스가 CodeDeploy 인데요. 배포 그룹의 각 환경 (인스턴스) 에 있는 어플리케이션을 일시정지한 후, 최신 상태의 어플리케이션의 변경 사항이 설치되면 새 버전의 앱을 실행하는 형식으로 이루어집니다. 로드 밸런서를 사용하면 각 인스턴스가 배포중이더라도 등록을 해제할 수 있으며, 배포 완료 후에 이전 버전으로 복원도 가능합니다.
-
-이것은 배포 방식 상 EC2, 온프레미스 환경에만 사용 가능한 배포 전략이 됩니다.
-
-#### 7.2 롤링 배포 (Rolling Update Deployment)
-
-여러 개의 가동중인 서버 (인스턴스)를 갖춘 환경에서 한 번에 정해진 수만큼의 서버에 새로운 변경 사항이 포함된 어플리케이션을 배포하는 방법입니다.
+- 일반적인 배포를 의미하며 단순하게 서버를 구성하여 배포하는 전략
+- 구버전에서 신버전으로 트래픽을 **점진적**으로 전환하며 구 버전의 인스턴스도 점차 삭제
+- 배포 중 나머지 인스턴스에 트래픽이 몰리기 때문에 서버 처리 용량을 사전에 고려 필요
+- Downtime은 발생하지 않으나, 이전 버전과 새로운 버전이 공존하는 시간이 존재한다는 단점이 있다.
 
 ![img](asset/argocd/41c994155cefa8d57a07db2d272bdda7-640x353.png)
 
-구 버전에서 새 버전으로 트래픽을 점진적으로 전환하며, 구 버전의 인스턴스도 점차 삭제됩니다. 그렇기 때문에 **서버 수의 제약이 있을 경우에는 유용한 방법**이 될 수 있지만 배포 중 인스턴스의 수가 감소 되기 때문에 서버 처리 용량을 미리 고려해야 합니다. 이 방식을 사용하고 있는 서비스는 Elastic Beanstalk와 CodeDeploy인데요. CodeDeploy는 공식문서에서 직접적으로 서술된 부분이 없기 때문에 알기 어렵지만 기본적으로 롤링 배포를 하도록 설정되어있습니다. 그래서 EC2, 온프레미스의 경우, 인플레이스 배포가 롤링 배포와 혼합된 방식을 따르고 있고, Lambda나 ECS의 경우는 롤링 배포가 기본적인 배포 방식이 된다고 이해하면 될 것 같네요.
 
-덤으로 Elastic Beanstalk의 배포 방법을 보면, 롤링이 그냥 롤링과 추가 배치를 사용한 롤링으로 나뉘는데요. 둘 다 구 버전에서 새 버전으로 점진적으로 전환되는 것은 동일하지만, 추가 배치를 사용한 롤링의 경우는 새 버전의 인스턴스를 배포한 후 바로 시작하여 배포 프로세스 중에도 모든 용량이 유지되도록 합니다.
 
-#### 7.3 블루/그린 배포 (Blue/Green Deployment)
+#### 7.2 블루/그린 배포 (Blue/Green Deployment)
 
-새로운 변경사항이 포함된 어플리케이션을 위한 새로운 환경을 구축하고 교체하는 방법입니다.
+**블루그린 배포란 구버전(블루) -> 신버전(그린) 으로 일제히 변경 후 배포하는 방식**
+
+- 구버전을 블루, 신버전을 그린
+- 신버전을 배포하고 일제히 모든 연결을 신버전으로 전환하는 전략
+- 하나의 버전만 프로덕션 되기 때문에운영환경에 영향을 주지 않으며 실제 서비스 환경으로 신버전 테스트 가능
+- 빠른 롤백이 가능하다
+- 구 버전과 새 버전 두 환경 모두 갖출 필요가 있기 때문에 자원이 두배로 필요하여 비용이 많이 발생
 
 ![img](asset/argocd/a051df001ed96d2353d035046cbd948e-640x216.png)
 
-흔히 블루/그린 배포를 "구 버전의 환경을 새 버전의 환경으로 똑같이 구축해서 한 번에 전환한다" 라고 생각하는데, 사실 이것은 Red/Black 배포의 정의입니다. 그래서 실제로는 "신 버전과 구 버전의 어플리케이션이 한 순간이라도 공존하였다" 라고 하는 것이 더 올바르다고 할 수 있습니다. (사실 Red/Black 배포에 대한 정의가 사람마다 다르다보니 모호한 개념이라는 건 안 비밀...) 이 이유에 대한 추가 설명은 아래 카나리 배포 부분 설명에 적어 놓을게요.
 
-아무튼 블루/그린 배포는 하나의 버전만 프로덕션 되기 때문에 **버전 관리 문제를 방지**할 수 있고, **운영 환경에 영향을 주지 않고 실제 서비스 환경으로 새 버전 테스트가 가능**합니다.
 
-또, 주로 인플레이스 배포와 비교될 때 언급되는 장점으로 새 버전으로 전환 후에 문제가 생겼을 시에 구 버전으로 되돌리기 위한 **롤백도 인플레이스 배포보다 더 빠르다**는 점이 있습니다.
+#### 7.3 카나리 배포 (Canary Deployment)
 
-단, 구 버전과 새 버전 두 환경 모두 갖출 필요가 있기 때문에 시스템 자원이 두 배로 필요해지며, 비용이 그만큼 비싸지기 때문에 비용을 고려한 구성을 필요로 한데요. 이런 단점은 AWS와 같은 클라우드 서비스에서는 종량 과금이라는 메리트가 있어 큰 부담 요소로 작용되지 않으니 그리 신경 쓸 부분은 아닙니다.
-
-블루/그린 배포도 Elastic Beanstalk, CodeDeploy에서 이 방식을 사용할 수 있습니다.
-
-#### 7.4 카나리 배포 (Canary Deployment)
+Canary Release(카나리 배포)는 SW 배포의 방법 중 하나이다. 조금씩 **사용자의 범위를 늘려가며 피드백을 통해 배포하는 방식**을 카나리 배포라고 한다. 쉽게 말해, 일부 사용자들에게 SW를 배포한 뒤 괜찮다면 사용자들을 늘려가며 배포하는 방식을 뜻한다. 
 
 가동 중인 서버들의 일부에만 새로운 앱을 배포하여, 일부 트래픽을 새 버전의 환경으로 분산하는 방법입니다.
 
+- 위험을 빠르게 감지할 수 있는 배포 전략
+- LB를 통해서 지정한 서버 또는 특정 사용자에게만 배포했다가 정상적이면 전체 배포 가능하다
+- A/B 테스트가 가능하며 오류율 체크 및 성능 모니터링에 유용
+- 트래픽을 분산시킬 때 라우팅을 랜덤하게 할 수도 있고 사용자로 분류할 수 있음
+- 테스트 결과에따라 구버전 롤백 또는 신버전 전환 가능
+
 ![img](asset/argocd/064c88818a5a3ffe98ab5e2af086d684-640x298.png)
 
-**A/B 테스트가 가능**하고, **오류율 및 성능 모니터링**에 유용하게 사용할 수 있다는 장점이 있는데요. 트래픽을 분산시킬 라우팅은 임의적 또는 사용자 프로필 등을 기반으로 분류할 수 있습니다. 분산 후에 결과에 따라 새 버전이 운영 환경을 대체할 수도 있고, 다시 구 버전으로 되돌릴 수도 있어요.
 
-이 방법을 사용하는 가장 대표적인 서비스는 API Gateway 인데, 사실 API Gateway 외에 카나리 방식이 언급된 서비스가 하나 있습니다. 바로 CodeDeploy 인데요. 블루/그린 배포의 배포 설정 타입의 종류 중 하나로 분류되어 있습니다.
-
-위의 블루/그린 배포 설명에서 "구 버전의 환경을 새 버전의 환경으로 똑같이 구축해서 한 번에 전환한다" 라는 게 올바른 정의가 아니라고 했는데, 블루/그린 배포의 트래픽 전환 방식은 All-at-Once (한 번에) 만 있는게 아니기 때문입니다. 아래의 공식 문서를 보시면 카나리 외에도 리니어라는 방식도 있으며 블루/그린 배포 방식을 사용할 때도 트래픽을 몇 번에 나누어 전환이 가능한 것을 확인할 수 있습니다.
 
 
 
@@ -662,6 +654,7 @@ https://isn-t.tistory.com/53
 https://velog.io/@wlgns5376/GitOps-ArgoCD%EC%99%80-Kustomize%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4-kubernetes%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0
 https://asuraiv.tistory.com/20
 https://chancethecoder.tistory.com/45
+https://eunhyee.tistory.com/270
 ```
 
 
