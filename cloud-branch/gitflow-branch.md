@@ -46,7 +46,7 @@ git flow 란?
 
 ```sh
 
-$ mkdir ~/temp/gittest
+$ mkdir -p ~/temp/gittest
   cd ~/temp/gittest
 
 $ git config --global user.email "ssongmantop@gmail.com"
@@ -714,8 +714,6 @@ untracked 상태인 파일을 모두 삭제한다.
 $ cd ~/temp/gittest
 
 
-$ git init
-
 # 신규 파일 생성
 $ echo "some1" > some.txt
   mkdir somedir
@@ -739,10 +737,6 @@ $ git status
 On branch master
 nothing to commit, working tree clean
 
-
-# 모두 삭제
-$ rm -rf *
-  rm -rf .git
 ```
 
 
@@ -764,6 +758,16 @@ $ cat userlist
 
 
 $ echo "6: temp song" >> userlist
+
+$ git status
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   userlist
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
 
 # 확인
 $ cat userlist
@@ -804,7 +808,7 @@ Changes to be committed:
         modified:   userlist
 
 
-# staged 복원
+# 1) staged 복원
 $ git restore --staged userlist
 
 $ git status
@@ -826,9 +830,15 @@ $ cat userlist
 6: temp song
 
 
-# 한번 더 복원
+# 2) 일반 복원
 $ git restore userlist
 # git restore *
+
+
+$ git status
+On branch main
+nothing to commit, working tree clean
+
 
 $ cat userlist
 1: Song
@@ -869,12 +879,13 @@ $ git commit -m "Park3 added"
  1 file changed, 1 insertion(+)
 
 $ git log --oneline
-fe393bc (HEAD -> reset-test) Park3 added
-cf9f83f (main) init update
+1b7e980 (HEAD -> main) Park3 added
+ec24e4e create userlist file
 
 
-# 되돌리기
-$ git reset --hard cf9f83f
+
+# 1) 특정 commit 주소로 되돌리기
+$ git reset --hard ec24e4e
 HEAD is now at cf9f83f init update
 
 # 확인
@@ -891,39 +902,14 @@ cf9f83f (HEAD -> reset-test, main) init update
 
 
 
-
-git log --oneline -n3
-e096ab8 (HEAD -> reset-test) reset 테스트용 커밋
-42b5bd8 update
-
-
-# 이전 커밋 형상으로 reset
+# [참고] 이전 커밋 형상으로 reset
 $ git reset --hard HEAD~
 HEAD is now at 42b5bd8 update
 
-# 원복 완료됨
-
-
-
-
-# hard reset 의 복구
-$ git reset --hard e096ab8
-HEAD is now at e096ab8 reset 테스트용 커밋
-
-
-
-# 
-# [다시] 이전 커밋 형상으로 reset
-$ git reset --hard 42b5bd8
-HEAD is now at 42b5bd8 update
-
-
-$ git log  --oneline -n2
-42b5bd8 (HEAD -> reset-test) update
 
 ```
 
-로컬 저장소의 커밋은 없어지지 않았다. 사라진 것처럼 보일 뿐이다. 
+
 
 
 
@@ -962,13 +948,6 @@ $ cat userlist
 4: Choi
 5: Park2
 Park3
-
-$ git stash
-
-
-# stash 로 저장
-$ git stash
-
 
 
 # stash 로 저장
@@ -1033,6 +1012,10 @@ Changes not staged for commit:
 no changes added to commit (use "git add" and/or "git commit -a")
 
 
+
+
+$ git clean 
+
 ```
 
 
@@ -1090,13 +1073,8 @@ $ git add .
 # 2) feature 브랜치
 $ git switch -c feature
 
-# userlist 초기 Data file 생성
-$ cat <<EOF > userlist
-1: Song
-2: Lee
-3: Kim
-4: Park
-EOF
+# Park 추가
+$ echo "4: Park" >> userlist
 
 $ git commit -a -m "Park update"
 [feature ecfa775] Park update
@@ -1112,13 +1090,15 @@ ba23ed2 init update
 # 3) main 브랜치
 $ git switch main
 
-# userlist 초기 Data file 생성
-$ cat <<EOF > userlist
+$ cat userlist
 1: Song
 2: Lee
 3: Kim
-4: Choi
-EOF
+
+
+# userlist 초기 Data file 생성
+$ echo "4: Choi" >> userlist
+
 
 $ git commit -a -m "Choi update"
 [main 286aaa3] Choi update
@@ -1198,7 +1178,7 @@ $ git log --oneline -2
 
 
 
-# 8) merge theirs
+# 8) merge ours
 $ git merge feature -X ours -m "merge ours"
 $ cat userlist
 1: Song
@@ -2118,7 +2098,7 @@ http://gitlab.35.209.207.26.nip.io/root/user01
 
 
 
-### (3) git repogitory 생성
+### (3) [참고] git repogitory 생성
 
 
 

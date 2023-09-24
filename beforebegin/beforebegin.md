@@ -91,28 +91,80 @@ CMD / PowerShell / putty 와 같은 기본 터미널을 이용해도 되지만 �
 
 
 
-## 1.4 STS 설치
+## 1.4 wsl2
 
-### (1) STS 설치
-
-- download 링크
-  - https://download.springsource.com/release/STS4/4.19.1.RELEASE/dist/e4.28/spring-tool-suite-4-4.19.1.RELEASE-e4.28.0-win32.win32.x86_64.self-extracting.jar
-
-- 설치
-  - 적당한 위치에 설치하자.
-
-- Workspace 설정
-  - 위치 : C:\workspace_STS4.18.1
-- [참고] STS링크 : https://spring.io/tools
+본인 PC 에 WSL이 설치되어 있는지 확인하자.
 
 
 
+### (1) 확인 하는 방법
 
-### (2) [참고] java 설치
+command 창에서 wsl 명령으로 설치여부를 확인 할 수 있다.
 
-- java 설치가 필요한 경우 아래 링크 참고
-  - https://download.oracle.com/java/17/latest/jdk-17_windows-x64_bin.msi
-- [참고] oracle.com 링크 : https://www.oracle.com/java/technologies/downloads/#jdk17-windows
+```sh
+> wsl -l -v 
+```
+
+
+
+- 만약 version 이 1 이라면 아래와 같이 update 한다.
+  - 참고링크
+    - https://docs.microsoft.com/en-us/windows/wsl/install
+    - https://docs.microsoft.com/ko-kr/windows/wsl/install-manual
+  - PowerShell 실행
+
+```sh
+> wsl --install
+
+> wsl --set-version Ubuntu 2
+
+# 기본값으로 설정 변경해도 됨
+> wsl --set-default-version 2
+
+# 강제 재기동
+> wsl -t Ubuntu
+
+```
+
+
+
+- linux 가 설정안되어 있다면
+
+```sh
+1. Microsoft Store를 열고 즐겨 찾는 Linux 배포를 선택
+   - Ubuntu 20.04.1 LTS
+
+2. 배포 페이지에서 "다운로드"를 선택
+
+3. 사용자 계정 및 암호 생성
+
+```
+
+
+
+
+
+### (2) WSL 실행하는 방법
+
+실행하는 방법은 아래와 같이 다양하다. 본인이 편한 방법을 선택하자.
+
+1. cmd 창에서 바로실행
+   - cmd 창에서 `wsl` 명령을 입력하면 바로 default linux 가 실행된다.
+   - `wsl -u root` 명령으로 root 로 실행 할 수 있다.
+
+
+
+2. windows 터미널 으로 실행하는 방법
+
+   - windows 터미널 설치 : https://docs.microsoft.com/ko-KR/windows/terminal/get-started
+
+   
+
+3. mobaxterm 에서 실행
+
+   - session > WSL 실행
+
+
 
 
 
