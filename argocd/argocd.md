@@ -2,7 +2,7 @@
 
 ### 1.ArgoCD란?
 
-### <img src="asset/argocd/image2.webp" alt="ArgoCD public & private config Repo 설정" style="zoom: 67%;" />
+<img src="asset/argocd/image2.webp" alt="ArgoCD public & private config Repo 설정" style="zoom: 67%;" />
 
 | 웹사이트        | https://github.com/argoproj/argo-cd |
 | :-------------- | :---------------------------------: |
@@ -12,13 +12,13 @@
 | 종류            |             지속적 통합             |
 | 라이선스        |                 MIT                 |
 
-ArgoCD는 Kubernetes 환경에 Gitops 스타일의 배포를 지원하는 CD 도구이며 Gitops 환경에 Git repository를 통하여 application을 등록 할 수 있습니다.
+ArgoCD는 Kubernetes 환경에 Gitops 스타일의 배포를 지원하는 CD 도구이며 Git repository를 통하여 application을 등록 할 수 있습니다.
 
 Git 소스가 변경 된 것을 감지하면 Sync를 맞춰줌으로서 변경된 소스를 Kubernetes에 배포하게 되는 방식으로 운영 됩니다.
 
-즉, 쿠버네티스의 구성 요소를 배포하기 위해서는 Manifest (ex).yaml 파일을 구성해 실행해야 하는데 이러한 파일들은 계속해서 변경되기 때문에 지속적인 관리가 필요합니다. 이를 간편하게 `Git`으로 관리하는 방식이 `GitOps`이고 간편하게 `GitOps`를 실현시키며 `Kubernetes`에 배포하는 툴이 `ArgoCD`입니다.
+쿠버네티스의 구성 요소를 배포하기 위해서는 yaml 파일을 구성해 실행해야 하는데 이러한 파일들은 계속해서 변경되기 때문에 지속적인 관리가 필요합니다. 이를 간편하게 `Git`으로 관리하는 방식이 `GitOps`이고 간편하게 `GitOps`를 실현시키며 `Kubernetes`에 배포하는 툴이 `ArgoCD`입니다.
 
-`ArgoCD`는 `GitOps` 방식으로 관리되는 `Manifest(yaml)` 파일의 변경사항을 감시하며, `현재 배포된 환경의 상태`와 `Github/Gitlab Repository Manifest 파일`에 정의된 상태를 동일하게 유지하는 역할을 수행합니다.
+즉 ,`ArgoCD`는 `GitOps` 방식으로 관리되는 `Manifest(yaml)` 파일의 변경사항을 감시하며, `현재 배포된 환경의 상태`와 `Github/Gitlab Repository Manifest 파일`에 정의된 상태를 동일하게 유지하는 역할을 수행합니다.
 
 ![image.webp](asset/argocd/image.webp)
 
@@ -63,9 +63,9 @@ a. 특정 마이크로서비스의 변경사항이 Source repo에 commit 된다.
 
 b. Jenkins의 Build Job이 해당 변경사항을 감지하거나 수동으로 Job을 실행하여 Docker Image 빌드를 수행한다.
 
-c. 빌드의 결과물은 Nexus Image Repository에 Push된다. (With Unique Tag Number)
+c. 빌드의 결과물은 Nexus Image Repository에 Push된다.
 
-d. 해당 Tag를 kustomize 명령어로 GitOps repo의 deployement manifest에 업데이트한다.
+d. 해당 Tag를 kustomize 명령어로 GitOps repo의 deployment manifest에 업데이트한다.
 
 e. d단계에서 업데이트한 deployment의 변경사항이 GitOps repo에 commit 된다.
 
@@ -114,7 +114,9 @@ ArgoCD가 Pull Type에 해당한다. ArgoCD는 연결된 Git Repository를 지�
 
 깃옵스를 구현할 때는 Pull Type 배포 전략을 권장하는데, 그 이유는 자격정보의 관리 때문이다. Push를 하기 위해서는 Push를 수행하는 지점에서(비록 외부 환경이라 할 지라도)관리 정보를 가지고 있어야 하며, 어떤 방식으로든 비인가자에 의하여 해당 Git Repository로 Push 이벤트가 발생한다면 배포 환경에 변경이 발생하여 피해를 입을 수 있기 때문이다.
 
-이와 반면에 Pull 이벤트를 기반으로 동작한다면 CD를 수행하는 ArgoCD에서만 해당 레포지토리에 대한 인증 정보를 가지고 있으면 되고, Pull 권한만을 필요로 하기 때문에 SSOT에 의도치 않은 변경이 발생할 위험으로부터 비교적 자유로워진다.
+이와 반면에 Pull 이벤트를 기반으로 동작한다면 CD를 수행하는 ArgoCD에서만 해당 레포지토리에 대한 인증 정보를 가지고 있으면 되고, Pull 권한만을 필요로 하기 때문에 SSOT(Single Source of Truth)에 의도치 않은 변경이 발생할 위험으로부터 비교적 자유로워진다.
+
+*[SSOT](https://en.wikipedia.org/wiki/Single_source_of_truth)는  데이터베이스, 애플리케이션, 프로세스 등의 모든 데이터에 대해 하나의 출처를 사용하는 개념을 의미합니다. 이는 데이터의 정확성, 일관성, 신뢰성을 보장하고, 일관성 있는 의사결정 및 작업 효율성을 높이는 데 도움을 줍니다.
 
 
 
@@ -128,14 +130,14 @@ ArgoCD가 Pull Type에 해당한다. ArgoCD는 연결된 Git Repository를 지�
 
 ##### 2.1.1 hello-world-spring
 
-**gitops/hello-world-spring/deployment.yaml**
+**sample/gitops/hello-world-spring/deployment.yaml**
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-spring
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -148,7 +150,7 @@ spec:
         app: hello-spring
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/spring-test:1.0.0
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-jenkins:1.0.0
         name: hello-spring
         ports:
         - containerPort: 8080
@@ -162,6 +164,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hello-spring-svc
+  nmaespace: ${USER_IDENTITY}
 spec:
   ports:
   - port: 8080
@@ -177,11 +180,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-world-spring-nexus
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   ingressClassName: traefik
   rules:
-  - host: hello-world-spring.nexus.cloud.35.209.207.26.nip.io
+  - host: hello-world-spring.${USER_IDENTITY}.cloud.35.209.207.26.nip.io
     http:
       paths:
       - backend:
@@ -204,7 +207,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/spring-test
+- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-jenkins
   newTag: 1.0.0
 ```
 
@@ -223,7 +226,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-express
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -236,7 +239,7 @@ spec:
         app: hello-express
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test:1.0.0
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins:1.0.0
         name: hello-express
         ports:
         - containerPort: 3000
@@ -250,6 +253,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hello-express-svc
+  namespace: ${USER_IDENTITY}
 spec:
   ports:
   - port: 8080
@@ -265,11 +269,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-world-express-nexus
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   ingressClassName: traefik
   rules:
-  - host: hello-world-express.nexus.cloud.35.209.207.26.nip.io
+  - host: hello-world-express.${USER_IDENTITY}.cloud.35.209.207.26.nip.io
     http:
       paths:
       - backend:
@@ -291,7 +295,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/express-test
+- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins
   newTag: 1.0.0
 ```
 
@@ -310,7 +314,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-flask
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   replicas: 1
   revisionHistoryLimit: 3
@@ -323,7 +327,7 @@ spec:
         app: hello-flask
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-test:1.0.0
+      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-jenkins:1.0.0
         name: hello-flask
         ports:
         - containerPort: 8082
@@ -337,6 +341,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: hello-flask-svc
+  namespace: ${USER_IDENTITY}
 spec:
   ports:
   - port: 8080
@@ -352,11 +357,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-world-flask-nexus
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   ingressClassName: traefik
   rules:
-  - host: hello-world-flask.nexus.cloud.35.209.207.26.nip.io
+  - host: hello-world-flask.${USER_IDENTITY}.cloud.35.209.207.26.nip.io
     http:
       paths:
       - backend:
@@ -379,7 +384,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/test/flask-test
+- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-jenkins
   newTag: 1.0.0
 ```
 
@@ -394,6 +399,10 @@ images:
 #### 3.1 helm Chart 준비
 
 ```bash
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+
+$ helm repo update
+
 $ helm search repo argo (23.09.01 기준)
 NAME            CHART VERSION   APP VERSION     DESCRIPTION
 bitnami/argo-cd 5.1.2           2.8.3           Argo CD is a continuous delivery tool for Kuber...
@@ -419,13 +428,13 @@ $ cd argo-cd
 #### 3.2 helm install&delete
 
 ```bash
-$ helm install argocd bitnami/argo-cd --version 5.1.2 -f values.yaml -n nexus \
+$ helm install argocd bitnami/argo-cd --version 5.1.2 -f values.yaml -n ${USER_IDENTITY} \
 --set server.ingress.enabled=true \
---set server.ingress.hostname=argocd.nexus.cloud.35.209.207.26.nip.io \
+--set server.ingress.hostname=argocd.${USER_IDENTITY}.cloud.35.209.207.26.nip.io \
 --set server.insecure=true \
 --set config.secret.argocdServerAdminPassword=new1234! 
 
-$ helm delete argocd -n nexus
+$ helm delete argocd -n ${USER_IDENTITY}
 ```
 
 
@@ -438,7 +447,7 @@ $ helm delete argocd -n nexus
 
 #### 4.1 초기설정
 
-**ArgoCD 접속**
+**ArgoCD 접속**(argocd.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
 ![image-20230917221252687](asset/argocd/image-20230917221252687.png)
 
@@ -446,15 +455,15 @@ $ helm delete argocd -n nexus
 
 ![image-20230917222527346](asset/argocd/image-20230917222527346.png)
 
-**CONNECT REPO -> VIA HTTPS이동 **
+**SETTINGS-> CONNECT REPO -> VIA HTTPS이동 **
 
-![image-20230917223028487](asset/argocd/image-20230917223028487.png)
+![image-20230924015749689](asset/argocd/image-20230924015749689.png)
 
 
 
 **Repositry 생성 확인 & Create Application**
 
-![image-20230917223133988](asset/argocd/image-20230917223133988.png)
+![image-20230924005151206](asset/argocd/image-20230924005151206.png)
 
 
 
@@ -468,27 +477,29 @@ $ helm delete argocd -n nexus
 
 **Application 설정값 입력 및 Application Create**
 
-![image-20230917223832558](asset/argocd/image-20230917223832558.png)
+![image-20230924020158441](asset/argocd\image-20230924020158441.png)
 
 **Application 생성확인 및 상세 이동**
 
-![image-20230917224017479](asset/argocd/image-20230917224017479.png)
+![image-20230924020311837](asset/argocd/image-20230924020311837.png)
 
-Sync 수행
+**Sync 수행**
 
-![image-20230917224153350](asset/argocd/image-20230917224153350.png)
+![image-20230924020406181](asset/argocd/image-20230924020406181.png)
 
 
 
 **배포 완료 및 확인**
 
-![image-20230917224213988](asset/argocd/image-20230917224213988.png)
+![image-20230924020505377](asset/argocd/image-20230924020505377.png)
 
 ```bash
-$ kubectl get all -n nexus
+$ kubectl get all -n ${USER_IDENTITY}
 ```
 
-![image-20230918150153957](asset/argocd/image-20230918150153957.png)
+https://hello-world-spring.user01.cloud.35.209.207.26.nip.io
+
+![image-20230924020610178](asset/argocd/image-20230924020610178.png)
 
 ---
 
@@ -498,7 +509,7 @@ $ kubectl get all -n nexus
 
 #### 6.1 Source 변경 
 
-eduTest\hello-world-spring\demo\src\main\java\com\example\demo\HelloController.java 변경
+sample/hello-world-spring/demo/src/main/java/com/example/demo/HelloController.java
 
 ```java
 package com.example.demo;
@@ -519,7 +530,7 @@ public class HelloController {
 
 #### 6.2 동적 이미지 태그 적용
 
-Jenkinsfile 변경
+sample/jenkins-files/jenkins_maven Or Jenkins Pipline Script
 
 ```groovy
 def TAG = new Date().format('yyyyMMddHHmmss')
@@ -532,8 +543,8 @@ def TAG = new Date().format('yyyyMMddHHmmss')
                 
                 ...
                 
-                podman build -t ${NEXUS_HOST}/test/spring-test:${TAG} --tls-verify=false . 
-                podman push ${NEXUS_HOST}/test/spring-test:${TAG}  --tls-verify=false
+                podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:${TAG} --cgroup-manager=cgroupfs --tls-verify=false . 
+                podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:${TAG}  --tls-verify=false
                 """
             }
         }        
@@ -541,36 +552,40 @@ def TAG = new Date().format('yyyyMMddHHmmss')
         stage('gitOps Update') {
             container('podman') {
             sh"""
-            cd base-project/sample/gitops/hello-world-spring
+            cd ${USER_IDENTITY}/base-project/sample/gitops/hello-world-spring
             
             git config --global user.email "jenkins@example.com"
             git config --global user.name "Jenkins Pipeline"
   
-            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/flask-test:${TAG}
+            kustomize edit set image ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:${TAG}
             
             git add .
-            git commit -am 'update  from Jenkins'
-            git push
+            git commit -m 'update  from Jenkins'
+            git push http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
             """
             }
         }
 ```
 
+#### 6.3 변경사항 빌드
 
+![image-20230924033608768](asset/argocd/image-20230924033608768.png)
 
-#### 6.3 ArgoCD Sync 
+#### 6.4 ArgoCD Sync 
 
 REFRESH -> SYNC -> SYNCHRONIZE
 
-![image-20230918145704332](asset/argocd/image-20230918145704332.png)
+![image-20230924033722820](asset/argocd/image-20230924033722820.png)
+
+
 
 배포 확인
 
-![image-20230918145904510](asset/argocd/image-20230918145904510.png)
+![image-20230924033838763](asset/argocd/image-20230924033838763.png)
 
-![image-20230918145757280](asset/argocd/image-20230918145757280.png)
+![image-20230924033921494](asset/argocd/image-20230924033921494.png)
 
-![image-20230918145929330](asset/argocd/image-20230918145929330.png)
+![image-20230924033951269](asset/argocd/image-20230924033951269.png)
 
 ---
 
@@ -646,6 +661,7 @@ https://velog.io/@ghkdtlwns987/GitOps-ArgoCD%EB%9E%80
 https://isn-t.tistory.com/53
 https://velog.io/@wlgns5376/GitOps-ArgoCD%EC%99%80-Kustomize%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%B4-kubernetes%EC%97%90-%EB%B0%B0%ED%8F%AC%ED%95%98%EA%B8%B0
 https://asuraiv.tistory.com/20
+https://chancethecoder.tistory.com/45
 ```
 
 

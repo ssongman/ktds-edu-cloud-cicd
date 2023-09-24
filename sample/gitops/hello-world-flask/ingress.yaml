@@ -2,11 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-world-flask-nexus
-  namespace: nexus
+  namespace: ${USER_IDENTITY}
 spec:
   ingressClassName: traefik
   rules:
-  - host: hello-world-flask.nexus.cloud.35.209.207.26.nip.io
+  - host: hello-world-flask.${USER_IDENTITY}.cloud.35.209.207.26.nip.io
     http:
       paths:
       - backend:
