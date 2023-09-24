@@ -54,13 +54,65 @@ git init
 
 $ git config --global user.email "ssongmantop@gmail.com"
   git config --global user.name "root"
-  git config --global init.defaultBranch <name>
+  git config --global init.defaultBranch master
 
 
 $ git init
 
 $ git status
 ```
+
+
+
+### 실습
+
+```
+
+
+# Sample Data file 생성
+$ echo aaa > A
+  echo bbb > B
+
+
+$ git checkout -b iss53
+Switched to a new branch 'iss53'
+
+# 위 명령은 아래 명령을 줄여 놓은 것이다.
+$ git branch iss53
+$ git checkout iss53
+
+
+
+```
+
+
+
+
+
+
+
+```mermaid
+---
+title: Example Git diagram
+---
+gitGraph
+   commit
+   commit
+   branch develop
+   checkout develop
+   commit
+   commit
+   checkout main
+   merge develop
+   commit
+   commit
+```
+
+
+
+
+
+
 
 
 
@@ -326,7 +378,7 @@ cat main2.txt
 리눅스에서 git prompt 를 보기 위해서는 아래와 같은 작업이 필요하다.
 
 ```sh
-$ vi ~/.bachrc
+$ vi ~/.bashrc
 ...
 parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
