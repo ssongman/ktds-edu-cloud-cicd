@@ -1,4 +1,4 @@
-# < Bastion Server Setup >
+# < EduCluster Server Setup >
 
 
 
@@ -6,270 +6,116 @@
 
 
 
+# 1. K3S 구성
 
 
-# 1. K3S 구성(Single mode)
 
 
 
-## 1) master node
+## 1) K3S 구성(HA mode)
+
+### (1) master node
 
 ```sh
 # root 권한으로 수행
 $ su
 
-$ curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644
 
-or
-
-$ curl -sfL https://get.k3s.io | sh -
+# master01에서
+$ curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --cluster-init
 
 # 확인
 $ kubectl version
-WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
-Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.5+k3s1", GitCommit:"7cefebeaac7dbdd0bfec131ea7a43a45cb125354", GitTreeState:"clean", BuildDate:"2023-05-27T00:05:40Z", GoVersion:"go1.19.9", Compiler:"gc", Platform:"linux/amd64"}
+Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
 Kustomize Version: v4.5.7
-Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.5+k3s1", GitCommit:"7cefebeaac7dbdd0bfec131ea7a43a45cb125354", GitTreeState:"clean", BuildDate:"2023-05-27T00:05:40Z", GoVersion:"go1.19.9", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+---
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+Kustomize Version: v4.5.7
+Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+
+
+
 
 
 # IP/ token 확인
 $ cat /var/lib/rancher/k3s/server/node-token
-K10f74ce1e1f309271e78114c63d51d5936249e3d379faf1c5c7b2269218f2f9220::server:459b5947077d6e612074e998ff769dd8
+K1053500b81d3608e011e82c285ad06590811db8059cca5ca0b3cbd10e969f95e03::server:9bd15fea5819e2ce185669abd5a1ce48
+---
+K10b0a3c6320b9ceff2b14ea265774c388e7aa4ad8cfa35804efb98eb9235f99290::server:5e7fd6a284e028bdcba918abd9fae74e
 
 
-# 확인
-$ kubectl get nodes -o wide
-NAME        STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION    CONTAINER-RUNTIME
-bastion03   Ready    control-plane,master   47s   v1.26.5+k3s1   10.158.0.29   <none>        Ubuntu 22.04.2 LTS   5.19.0-1022-gcp   containerd://1.7.1-k3s1
 
 
-```
+# master01 에서
+$ kubectl get nodes -w
 
+# master02, 03 에서
+$ export MASTER_TOKEN="K10b0a3c6320b9ceff2b14ea265774c388e7aa4ad8cfa35804efb98eb9235f99290::server:5e7fd6a284e028bdcba918abd9fae74e"
+  export MASTER_IP="10.128.0.35"
 
+$ curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --server https://${MASTER_IP}:6443 --token ${MASTER_TOKEN}
 
-## 2) kubeconfig 설정
+…
+[INFO]  systemd: Starting k3s-agent   ← 정상 로그
 
-일반 User가 직접 kubctl 명령 실행을 위해서는 kube config 정보(~/.kube/config) 가 필요하다.
 
-k3s 를 설치하면 /etc/rancher/k3s/k3s.yaml 에 정보가 존재하므로 이를 복사한다. 또한 모든 사용자가 읽을 수 있도록 권한을 부여 한다.
 
-```sh
-## root 로 실행
-$ su
 
-$ ll /etc/rancher/k3s/k3s.yaml
--rw------- 1 root root 2961 May 14 03:23 /etc/rancher/k3s/k3s.yaml
+# master01 에서
+$ kubectl get nodes
+NAME                STATUS   ROLES                       AGE     VERSION
+ktds-k3s-master01   Ready    control-plane,etcd,master   2m30s   v1.26.4+k3s1
+ktds-k3s-master02   Ready    control-plane,etcd,master   29s     v1.26.4+k3s1
+ktds-k3s-master03   Ready    control-plane,etcd,master   46s     v1.26.4+k3s1
 
-# 모든 사용자에게 읽기권한 부여
-$ chmod +r /etc/rancher/k3s/k3s.yaml
 
-$ ll /etc/rancher/k3s/k3s.yaml
--rw-r--r-- 1 root root 2961 May 14 03:23 /etc/rancher/k3s/k3s.yaml
 
-# 일반 user 로 전환
-$ exit
+# [참고]istio setup을 위한 k3s 설정시 아래 참고
+## traefik 을 deploy 하지 않는다. 
+## istio 에서 별도 traefic 을 설치하는데 이때 기설치된 controller 가 있으면 충돌 발생함 - istio version 1.14
+$ curl -sfL https://get.k3s.io |INSTALL_K3S_EXEC="--no-deploy traefik" sh -
 
-
-
-
-## 사용자 권한으로 실행
-
-$ mkdir -p ~/.kube
-
-$ cp /etc/rancher/k3s/k3s.yaml ~/.kube/config
-
-$ ll ~/.kube/config
--rw-r--r-- 1 song song 2957 May 14 03:44 /home/song/.kube/config
-
-# 자신만 RW 권한 부여
-$ chmod 600 ~/.kube/config
-
-$ ls -ltr ~/.kube/config
--rw------- 1 ktdseduuser ktdseduuser 2957 May 13 14:35 /home/ktdseduuser/.kube/config
-
-
-
-## 확인
-$ kubectl version
-Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.5+k3s1", GitCommit:"7cefebeaac7dbdd0bfec131ea7a43a45cb125354", GitTreeState:"clean", BuildDate:"2023-05-27T00:05:40Z", GoVersion:"go1.19.9", Compiler:"gc", Platform:"linux/amd64"}
-Kustomize Version: v4.5.7
-Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.5+k3s1", GitCommit:"7cefebeaac7dbdd0bfec131ea7a43a45cb125354", GitTreeState:"clean", BuildDate:"2023-05-27T00:05:40Z", GoVersion:"go1.19.9", Compiler:"gc", Platform:"linux/amd64"}
-
-```
-
-root 권한자가 아닌 다른 사용자도 사용하려면 위와 동일하게 수행해야한다.
-
-
-
-## 3) Helm Install
-
-### (1) helm client download
-
-```sh
-# 개인 PC WSL
-# root 권한으로 수행
-$ su
-
-
-## 임시 디렉토리를 하나 만들자.
-$ mkdir -p ~/temp/helm/
-  cd ~/temp/helm/
-
-# 다운로드
-$ wget https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz
-
-# 압축해지
-$ tar -zxvf helm-v3.12.0-linux-amd64.tar.gz
-
-# 확인
-$ ll linux-amd64/helm
--rwxr-xr-x 1 1001 docker 50597888 May 11 01:35 linux-amd64/helm*
-
-# move
-$ mv linux-amd64/helm /usr/local/bin/helm
-
-# 확인
-$ ll /usr/local/bin/helm*
--rwxr-xr-x 1 1001 docker 50597888 May 11 01:35 /usr/local/bin/helm*
-
-
-# 일반유저로 복귀
-$ exit
-
-
-# 확인
-$ helm version
-version.BuildInfo{Version:"v3.12.0", GitCommit:"c9f554d75773799f72ceef38c51210f1842a1dea", GitTreeState:"clean", GoVersion:"go1.20.3"}
-
-
-$ helm -n yjsong ls
-NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
-
-```
-
-
-
-### [참고] bitnami repo 추가
-
-- 유명한 charts 들이모여있는 bitnami repo 를 추가해 보자.
-
-```sh
-# test# add stable repo
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-
-$ helm repo list
-
-$ helm search repo bitnami
-# bitnami 가 만든 다양한 오픈소스 샘플을 볼 수 있다.
-NAME                                            CHART VERSION   APP VERSION     DESCRIPTION
-bitnami/airflow                                 14.1.3          2.6.0           Apache Airflow is a tool to express and execute...
-bitnami/apache                                  9.5.3           2.4.57          Apache HTTP Server is an open-source HTTP serve...
-bitnami/appsmith                                0.3.2           1.9.19          Appsmith is an open source platform for buildin...
-bitnami/argo-cd                                 4.7.2           2.6.7           Argo CD is a continuous delivery tool for Kuber...
-bitnami/argo-workflows                          5.2.1           3.4.7           Argo Workflows is meant to orchestrate Kubernet...
-bitnami/aspnet-core                             4.1.1           7.0.5           ASP.NET Core is an open-source framework for we...
-bitnami/cassandra                               10.2.2          4.1.1           Apache Cassandra is an open source distributed ...
-bitnami/consul                                  10.11.2         1.15.2          HashiCorp Consul is a tool for discovering and ...
-...
-
-$ kubectl create ns yjsong
-
-# 설치테스트(샘플: nginx)
-$ helm -n yjsong install nginx bitnami/nginx
-
-$ kubectl -n yjsong get all
-NAME                         READY   STATUS              RESTARTS   AGE
-pod/nginx-68c669f78d-wgnp4   0/1     ContainerCreating   0          10s
-
-NAME            TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
-service/nginx   LoadBalancer   10.43.197.4   <pending>     80:32754/TCP   10s
-
-NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/nginx   0/1     1            0           10s
-
-NAME                               DESIRED   CURRENT   READY   AGE
-replicaset.apps/nginx-68c669f78d   1         1         0       10s
-
-# 간단하게 nginx 에 관련된 deployment / service / pod 들이 설치되었다.
-
-
-# 설치 삭제
-$ helm -n yjsong delete nginx
-
-$ kubectl -n yjsong  get all
-No resources found in yjsong namespace.
+# [참고] istio version 1.14 에서 현재 1.17.2로 버전업되면서 DaemonSet 이 사라졌다.
+# traefik 과 충돌 현상도 사라졌다.
 ```
 
 
 
 
 
+#### [참고] 수동실행
 
-
-
-
-## 4) alias 정의
-
-```sh
-# user 권한으로
-
-$ cat > ~/env
-alias k='kubectl'
-alias kk='kubectl -n kube-system'
-alias ky='kubectl -n yjsong'
-alias ki='kubectl -n istio-system'
-alias kb='kubectl -n bookinfo'
-alias kii='kubectl -n istio-ingress'
-alias kubectl -n kafka='kubectl -n kafka'
-alias krs='kubectl -n redis-system'
-
-## alias 를 적용하려면 source 명령 수행
-$ source ~/env
-
-# booting 시 자동인식하게 하려면 아래 파일 수정
-$ vi ~/.bashrc
-...
-source ~/env
-
-
-```
-
-
-
-
-
-
-
-## 5) K9S Setup
-
-kubernetes Cluster를 관리하기 위한 kubernetes cli tool 을 설치해 보자.
+설치가 안된다면 아래와 같이 수동실행 진행해 보자.
 
 ```sh
 # root 권한으로
 
-$ mkdir ~/temp/k9s
-  cd  ~/temp/k9s
-
-$ wget https://github.com/derailed/k9s/releases/download/v0.27.4/k9s_Linux_amd64.tar.gz
-$ tar -xzvf k9s_Linux_amd64.tar.gz
-
-$ ll
--rw-r--r-- 1  501 staff    10174 Mar 22  2021 LICENSE
--rw-r--r-- 1  501 staff    35702 May  7 16:54 README.md
--rwxr-xr-x 1  501 staff 60559360 May  7 17:01 k9s*
--rw-r--r-- 1 root root  18660178 May  7 17:03 k9s_Linux_amd64.tar.gz
-
-$ cp ./k9s /usr/local/bin/
-
-$ ll /usr/local/bin/
--rwxr-xr-x  1 root root 60559360 May 15 13:05 k9s*
+$ export MASTER_TOKEN="K10b0a3c6320b9ceff2b14ea265774c388e7aa4ad8cfa35804efb98eb9235f99290::server:5e7fd6a284e028bdcba918abd9fae74e"
+  export MASTER_IP="10.128.0.35"
 
 
-# 일반 사용자로 전환
-$ exit 
+$ sudo k3s server --server https://${MASTER_IP}:6443 --token ${MASTER_TOKEN} &
 
-# 실행
-$ k9s
+
+$ k3s server &
+…
+COMMIT 
+…
+
+# k3s 데몬 확인
+$ ps -ef|grep k3s
+root         590     405  0 13:05 pts/0    00:00:00 sudo k3s server
+root         591     590 76 13:05 pts/0    00:00:26 k3s server
+root         626     591  5 13:05 pts/0    00:00:01 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd
+...
+
+$ k3s kubectl version
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+Kustomize Version: v4.5.7
+Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
 
 ```
 
@@ -277,9 +123,143 @@ $ k9s
 
 
 
-## 6) Clean up
 
-### (1) node 제거
+
+#### [참고] Master Node 비정상일 경우
+
+master node 중 하나가 비정상 작동한다면 아래와 같이 수행하자.
+
+* 시나리오1
+  * 가정
+    * master1번이 비정상, master2,3 은 정상일 경우
+  * 조치
+    * token은 최초 공유했던 token 값으로 유지한다.
+    * master_ip 는 정상인 2번의 IP 를 참고한다.
+
+```sh
+# root 권한으로
+
+# 1) k3s kill
+$ sh /usr/local/bin/k3s-killall.sh
+
+# 2) 환경변수 셋팅
+# 정상인 MASTER_IP 를 셋팅한다.
+$ export MASTER_TOKEN="K10b0a3c6320b9ceff2b14ea265774c388e7aa4ad8cfa35804efb98eb9235f99290::server:5e7fd6a284e028bdcba918abd9fae74e"
+  export MASTER_IP="10.128.0.35"
+
+# 3) k3s 실행
+$ sudo k3s server --server https://${MASTER_IP}:6443 --token ${MASTER_TOKEN} &
+
+…
+COMMIT 
+…
+
+# 4) k3s 데몬 확인
+$ ps -ef|grep k3s
+root         590     405  0 13:05 pts/0    00:00:00 sudo k3s server
+root         591     590 76 13:05 pts/0    00:00:26 k3s server
+root         626     591  5 13:05 pts/0    00:00:01 containerd -c /var/lib/rancher/k3s/agent/etc/containerd/config.toml -a /run/k3s/containerd/containerd.sock --state /run/k3s/containerd --root /var/lib/rancher/k3s/agent/containerd
+...
+
+# 5) kubectl version 확인
+$ k3s kubectl version
+WARNING: This version information is deprecated and will be replaced with the output from kubectl version --short.  Use --output=yaml|json to get the full version.
+Client Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+Kustomize Version: v4.5.7
+Server Version: version.Info{Major:"1", Minor:"26", GitVersion:"v1.26.4+k3s1", GitCommit:"8d0255af07e95b841952563253d27b0d10bd72f0", GitTreeState:"clean", BuildDate:"2023-04-20T00:33:18Z", GoVersion:"go1.19.8", Compiler:"gc", Platform:"linux/amd64"}
+
+```
+
+
+
+
+
+
+
+
+
+
+
+### (2) worker node
+
+```sh
+# root 권한으로 수행
+# worker node 에서 각각 수행
+
+
+$ export MASTER_TOKEN="K10b0a3c6320b9ceff2b14ea265774c388e7aa4ad8cfa35804efb98eb9235f99290::server:5e7fd6a284e028bdcba918abd9fae74e"
+  export MASTER_IP="10.128.0.35"
+  
+
+$ curl -sfL https://get.k3s.io | K3S_URL=https://${MASTER_IP}:6443 K3S_TOKEN=${MASTER_TOKEN} sh -
+
+…
+[INFO]  systemd: Starting k3s-agent   ← 나오면 정상
+
+
+
+# master01 에서
+$ kubectl get nodes
+NAME                STATUS   ROLES                       AGE     VERSION
+ktds-k3s-master01   Ready    control-plane,etcd,master   5m19s   v1.26.4+k3s1
+ktds-k3s-master02   Ready    control-plane,etcd,master   3m18s   v1.26.4+k3s1
+ktds-k3s-master03   Ready    control-plane,etcd,master   3m35s   v1.26.4+k3s1
+ktds-k3s-worker01   Ready    <none>                      28s     v1.26.4+k3s1
+ktds-k3s-worker02   Ready    <none>                      63s     v1.26.4+k3s1
+ktds-k3s-worker03   Ready    <none>                      53s     v1.26.4+k3s1
+
+
+```
+
+
+
+#### label 에 node-role 셋팅
+
+```sh
+# node role 셋팅
+$ kubectl label node worker01 node-role.kubernetes.io/worker="true"
+  kubectl label node worker02 node-role.kubernetes.io/worker="true"
+  kubectl label node worker03 node-role.kubernetes.io/worker="true"
+  kubectl label node worker04 node-role.kubernetes.io/worker="true"
+
+# node role 확인
+$ k get nodes
+NAME                STATUS   ROLES                       AGE    VERSION
+ktds-k3s-master01   Ready    control-plane,etcd,master   125d   v1.27.5+k3s1
+ktds-k3s-master02   Ready    control-plane,etcd,master   125d   v1.26.4+k3s1
+ktds-k3s-master03   Ready    control-plane,etcd,master   111d   v1.26.5+k3s1
+worker01            Ready    worker                      41m    v1.27.6+k3s1
+worker02            Ready    worker                      35m    v1.27.6+k3s1
+worker03            Ready    worker                      39m    v1.27.6+k3s1
+worker04            Ready    worker                      36m    v1.27.6+k3s1
+
+```
+
+
+
+
+
+
+
+#### [참고] 수동실행
+
+설치가 안된다면 아래와 같이 수동실행 진행해 보자.
+
+```sh
+# root 권한으로
+
+$ sudo k3s agent --server https://${MASTER_IP}:6443 --token ${NODE_TOKEN} &
+```
+
+
+
+
+
+
+
+
+
+### (3) node 제거
 
 #### Cordon
 
@@ -302,23 +282,25 @@ drain 과정에 cordon이 포함되어 있다고 볼 수 있다.
 
 ```sh
 $ kubectl get nodes
-NAME                   STATUS   ROLES                       AGE    VERSION
-ktds-k3s-master-stpc   Ready    control-plane,etcd,master   4h4m   v1.26.4+k3s1
-ktds-k3s-master-vlhj   Ready    control-plane,etcd,master   4h2m   v1.26.4+k3s1
-ktds-k3s-master-wwfs   Ready    control-plane,etcd,master   4h2m   v1.26.4+k3s1
-ktds-k3s-worker-9zmq   Ready    <none>                      171m   v1.26.4+k3s1
-ktds-k3s-worker-b47j   Ready    <none>                      171m   v1.26.4+k3s1
-ktds-k3s-worker-ncz7   Ready    <none>                      171m   v1.26.4+k3s1
-ktds-k3s-worker-w2z4   Ready    <none>                      171m   v1.26.4+k3s1
-ktds-k3s-worker-xmpb   Ready    <none>                      171m   v1.26.4+k3s1
+NAME                STATUS   ROLES                       AGE    VERSION
+ktds-k3s-master01   Ready    control-plane,etcd,master   100d   v1.26.4+k3s1
+ktds-k3s-master02   Ready    control-plane,etcd,master   100d   v1.26.4+k3s1
+ktds-k3s-master03   Ready    control-plane,etcd,master   86d    v1.26.5+k3s1
+ktds-k3s-worker01   Ready    <none>                      100d   v1.26.4+k3s1
+ktds-k3s-worker02   Ready    <none>                      86d    v1.26.5+k3s1
+ktds-k3s-worker03   Ready    <none>                      86d    v1.26.5+k3s1
+ktds-k3s-worker04   Ready    <none>                      21h    v1.27.4+k3s1
 
 
 
-$ kubectl drain ktds-k3s-worker-9zmq --ignore-daemonsets 
-  kubectl drain ktds-k3s-worker-b47j --ignore-daemonsets 
-  kubectl drain ktds-k3s-worker-ncz7 --ignore-daemonsets 
-  kubectl drain ktds-k3s-worker-w2z4 --ignore-daemonsets 
-  kubectl drain ktds-k3s-worker-xmpb --ignore-daemonsets 
+
+$ kubectl drain ktds-k3s-worker04 --ignore-daemonsets --delete-emptydir-data
+$ kubectl drain ktds-k3s-worker03 --ignore-daemonsets --delete-emptydir-data
+$ kubectl drain ktds-k3s-worker02 --ignore-daemonsets --delete-emptydir-data
+$ kubectl drain ktds-k3s-worker01 --ignore-daemonsets --delete-emptydir-data
+
+
+
 
 
 $ kubectl get nodes
@@ -326,8 +308,10 @@ NAME                STATUS                     ROLES                       AGE  
 ktds-k3s-master01   Ready                      control-plane,etcd,master   64m     v1.26.4+k3s1
 ktds-k3s-master02   Ready                      control-plane,etcd,master   17m     v1.26.4+k3s1
 ktds-k3s-master03   Ready                      control-plane,etcd,master   9m37s   v1.26.4+k3s1
-ktds-k3s-worker01   Ready,SchedulingDisabled   control-plane,etcd,master   7m51s   v1.26.4+k3s1
-ktds-k3s-worker02   Ready,SchedulingDisabled   control-plane,etcd,master   7m37s   v1.26.4+k3s1
+ktds-k3s-worker01   Ready                      control-plane,etcd,master   7m51s   v1.26.4+k3s1
+ktds-k3s-worker02   Ready                      control-plane,etcd,master   7m37s   v1.26.4+k3s1
+ktds-k3s-worker03   Ready                      control-plane,etcd,master   7m37s   v1.26.4+k3s1
+ktds-k3s-worker04   Ready,SchedulingDisabled   control-plane,etcd,master   21h    v1.27.4+k3s1
 
 
 ```
@@ -338,17 +322,18 @@ ktds-k3s-worker02   Ready,SchedulingDisabled   control-plane,etcd,master   7m37s
 
 ```sh
 # drain 작업 이후
-$ kubectl delete node ktds-k3s-worker-9zmq
- kubectl delete node ktds-k3s-worker-b47j
- kubectl delete node ktds-k3s-worker-ncz7
- kubectl delete node ktds-k3s-worker-w2z4
- kubectl delete node ktds-k3s-worker-xmpb
+$ kubectl delete node ktds-k3s-worker04
+$ kubectl delete node ktds-k3s-worker03
+$ kubectl delete node ktds-k3s-worker02
+$ kubectl delete node ktds-k3s-worker01
 
 ```
 
 
 
-### (2) k3s uninstall
+
+
+### (4) k3s uninstall
 
 ```sh
 ## uninstall
@@ -361,11 +346,11 @@ $ sh /usr/local/bin/k3s-killall.sh
 
 
 
-# 2. 기타 Tool Setup
+## 2) 기타 Tool Setup
 
 
 
-## 1) apt install 
+### (1) apt install 
 
 ```sh
 # root 로
@@ -374,24 +359,17 @@ $ apt update
 
 $ apt install vim
 
-
 $ apt install tree
-
 
 $ apt install iputils-ping
 
 $ apt install net-tools
 
-
 $ apt install netcat
-
 
 $ apt install unzip
 
-
 $ apt install git
- 
-
 
 $ apt install podman
 $ podman version
@@ -401,7 +379,6 @@ Go Version:   go1.15.2
 Built:        Thu Jan  1 09:00:00 1970
 OS/Arch:      linux/amd64
 
-
 ```
 
 
@@ -410,13 +387,9 @@ OS/Arch:      linux/amd64
 
 
 
-# < Gitlab Setup >
+# 2. Gitlab Setup
 
 
-
-# 1. Install
-
-> with yaml - gitlab-ce
 
 
 
@@ -616,54 +589,133 @@ password : ktdspass!
 
 
 
-# < 기타 >
+
+
+
+
+# 3. helm install
+
+쿠버네티스에 서비스를 배포하는 방법이 다양하게 존재하는데 그중 대표적인 방법중에 하나가 Helm chart 방식 이다.
+
+
+
+## 1) helm chart 와 Architecture
+
+#### helm chart 의 필요성
+
+일반적으로 Kubernetes 에 서비스를 배포하기 위해 준비되는 Manifest 파일은 정적인 형태이다. 따라서 데이터를 수정하기 위해선 파일 자체를 수정해야 한다. 잘 관리를 한다면 큰 어려움은 없겠지만, 문제는 CI/CD 등 자동화된 파이프라인을 구축해서 애플리케이션 라이프사이클을 관리할 때 발생한다.
+
+보통 애플리케이션 이미지를 새로 빌드하게 되면, 빌드 넘버가 변경된다. 이렇게 되면 새로운 이미지를 사용하기 위해 Kubernetes Manifest의 Image도 변경되어야 한다. 하지만 Kubernetes Manifest를 살펴보면, 이를 변경하기 쉽지 않다. Image Tag가 별도로 존재하지 않고 Image 이름에 붙어있기 때문입니다. 이를 자동화 파이프라인에서 변경하려면, sed 명령어를 쓰는 등의 힘든 작업을 해야 한다.
+
+Image Tag는 굉장히 단적인 예제이다. 이 외에 도 Configmap 등 배포시마다 조금씩 다른 형태의 데이터를 배포해야 할때 Maniifest 파일 방식은 너무나 비효율적이다. Helm Chart 는 이런 어려운 점을 모두 해결한 훌륭한 도구이다. 비단, 사용자가 개발한 AP 뿐아니라 kubernetes 에 배포되는 오픈소스 기반 솔루션들은 거의 모두 helm chart 를 제공한다.
+
+Istio 도 마찬가지로 helm 배포를 위한 chart 를 제공해 준다.
+
+#### Helm Architecture
+
+
+
+![helm-architecure.png](cluster-setup.assets/helm-architecure-1695559618260-1.png)
 
 
 
 
 
-## worker node 추가
+## 2) helm client download
 
-16GB * 4EA
+helm client 를 local 에 설치해 보자.
+
+개인 Termimal 에서 아래 작업을 수행하자.
+
+```bash
+# root 권한으로 수행
+$ su
+
+
+## 임시 디렉토리를 하나 만들자.
+$ mkdir -p ~/helm/
+$ cd ~/helm/
+
+# 다운로드
+$ wget https://get.helm.sh/helm-v3.12.0-linux-amd64.tar.gz
+
+# 압축해지
+$ tar -zxvf helm-v3.12.0-linux-amd64.tar.gz
+
+# 확인
+$ ll linux-amd64/helm
+-rwxr-xr-x 1 1001 docker 50597888 May 11 01:35 linux-amd64/helm*
+
+# move
+$ mv linux-amd64/helm /usr/local/bin/helm
+
+# 확인
+$ ll /usr/local/bin/helm*
+-rwxr-xr-x 1 1001 docker 50597888 May 11 01:35 /usr/local/bin/helm*
+
+
+# 일반유저로 복귀
+$ exit
+
+
+# 확인
+$ helm version
+version.BuildInfo{Version:"v3.12.0", GitCommit:"c9f554d75773799f72ceef38c51210f1842a1dea", GitTreeState:"clean", GoVersion:"go1.20.3"}
+
+
+$ helm -n user02 ls
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+```
 
 
 
-* namespace 는 사전에 만들어 놓는다. -- 종수
+## 3) bitnami repo 추가
 
-edu01
-edu02
+- 유명한 charts 들이모여있는 bitnami repo 를 추가후 nginx 를 배포해 보자.
+
+```bash
+# test# add stable repo
+$ helm repo add bitnami https://charts.bitnami.com/bitnami
+
+$ helm search repo bitnami
+# bitnami 가 만든 다양한 오픈소스 샘플을 볼 수 있다.
+NAME                                            CHART VERSION   APP VERSION     DESCRIPTION
+bitnami/airflow                                 14.1.3          2.6.0           Apache Airflow is a tool to express and execute...
+bitnami/apache                                  9.5.3           2.4.57          Apache HTTP Server is an open-source HTTP serve...
+bitnami/appsmith                                0.3.2           1.9.19          Appsmith is an open source platform for buildin...
+bitnami/argo-cd                                 4.7.2           2.6.7           Argo CD is a continuous delivery tool for Kuber...
+bitnami/argo-workflows                          5.2.1           3.4.7           Argo Workflows is meant to orchestrate Kubernet...
+bitnami/aspnet-core                             4.1.1           7.0.5           ASP.NET Core is an open-source framework for we...
+bitnami/cassandra                               10.2.2          4.1.1           Apache Cassandra is an open source distributed ...
 ...
-edu20
+
+# 설치테스트(샘플: nginx)
+$ helm -n user02 install nginx bitnami/nginx
+
+$ ku get all
+NAME                         READY   STATUS              RESTARTS   AGE
+pod/nginx-68c669f78d-wgnp4   0/1     ContainerCreating   0          10s
+
+NAME            TYPE           CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+service/nginx   LoadBalancer   10.43.197.4   <pending>     80:32754/TCP   10s
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx   0/1     1            0           10s
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-68c669f78d   1         1         0       10s
+
+# 간단하게 nginx 에 관련된 deployment / service / pod 들이 설치되었다.
 
 
+# 설치 삭제
+$ helm -n user02 delete nginx
+
+$ ku get all
+No resources found in user02 namespace.
+```
 
 
-
-### VM 설정
-
-bastion01 ~ bastion20
-
-
-
-k3s  -- local 이 아닌 educluster 연결만....
-
-helm
-
-docker
-
-git
-
-git flow
-
-curl
-
-nc
-
-ping
-
-ipconfig
-
-net-tools
 
 
 
