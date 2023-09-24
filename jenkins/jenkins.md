@@ -217,6 +217,32 @@ http://gitlab.35.209.207.26.nip.io/
 
 ![image-20230919091158245](asset/jenkins/image-20230919091158245.png)
 
+---
+
+
+
+**GitHub 사용시**
+
+https://github.com/settings/tokens or github -> settings -> developer settings -> Personal access tokens
+
+**Generate new Token**
+
+![image-20230916201904004](asset/jenkins/image-20230916201904004.png)
+
+**Select Scopes**
+
+![image-20230916204106190](asset/jenkins/image-20230916204106190.png)
+
+
+
+**Token 저장**
+
+![image-20230918151331800](asset/jenkins/image-20230918151331800.png)
+
+
+
+---
+
 
 
 ##### 2.2.2 프로젝트 생성
@@ -418,6 +444,14 @@ $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/sprin
 
 
 
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
+```
+
+
+
 ##### 2.3.2 Npm(node.js) 
 
 Sample Project
@@ -477,6 +511,12 @@ $ docker tag express-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${US
 $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-test:1.0.0
 1.0.0: digest: sha256:b93ce4d64616e232916dbbf8938921b42a72de64652069e2b3ff89d26e54a219 size: 2836
 
+```
+
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
 ```
 
 
@@ -556,6 +596,12 @@ ce0f4c80e9b7: Pushed
 4693057ce236: Pushed
 1.0.0: digest: sha256:22da2f85ca92f5ddb0f74845bcad1e4b9d0e32f81a03b67998f8a0b2aabd20e5 size: 2200
 
+```
+
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
 ```
 
 
@@ -693,6 +739,12 @@ f7bb7102ce10: Layer already exists
 
 ```
 
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
+```
+
 
 
 **npm-build-tool** 
@@ -770,6 +822,12 @@ f25ec1d93a58: Layer already exists
 
 ```
 
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
+```
+
 
 
 **python-build-tool **
@@ -838,6 +896,12 @@ acd413ce78f8: Layer already exists
 b8544860ba0b: Layer already exists
 1.0.0: digest: sha256:d61bf8efa50e5a2c0ca2d78486433b2aa1dc33f75a4bf31657b0465b8e9a5a97 size: 2218
 
+```
+
+Image Push 확인
+
+```
+http://nexus.nexus.cloud.35.209.207.26.nip.io
 ```
 
 
@@ -929,6 +993,15 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
 --set agent.resources.limits.cpu=1024m \
 --set agent.resources.limits.memory=1024Mi
 
+    image: "jenkins/inbound-agent:3142.vcfca_0cd92128-1"
+    name: "jnlp"
+    resources:
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+        
+        
+
 #helm chart delete
 $ helm -n ${USER_IDENTITY} delete jenkins
 
@@ -972,29 +1045,9 @@ Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
 
 
 
-#### 4.2 Git-Token 발급 
-
-**4.2.1 GITHUB**
-
-https://github.com/settings/tokens or github -> settings -> developer settings -> Personal access tokens
-
-**Generate new Token**
-
-![image-20230916201904004](asset/jenkins/image-20230916201904004.png)
-
-**Select Scopes**
-
-![image-20230916204106190](asset/jenkins/image-20230916204106190.png)
 
 
-
-**Token 저장**
-
-![image-20230918151331800](asset/jenkins/image-20230918151331800.png)
-
-
-
-#### 4.3 Credentials 설정
+#### 4.2 Credentials 설정
 
 **Jenkins관리 -> System 이동**
 
@@ -1020,7 +1073,7 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 
 
-#### 4.4 Global Properties 설정
+#### 4.3 Global Properties 설정
 
 Jenkins 관리 -> System 이동
 
