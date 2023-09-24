@@ -6,25 +6,356 @@
 
 
 
-# 1. Git Flow Branch 전략
+# 1. Git FLow 개요
 
+git flow 란?
 
-
-## 1) Git FLow 개요
-
-
-
-Vincent Driessen 란 분이 2010년에 블로그에 올린 글에 의해 널리 퍼지기 시작한 git branch 관리 방법이다.
-
-특별한 기술은 아니고, 협업하는 사람들끼리 브랜치 관리에 대해 "우리 이렇게 브랜치 전략 짜자" 와 같은 방법론(Model)일 뿐입니다.
+* 2010년 Vincent Driessen 가 자신의 블로그에 올린 글을 시작으로 널리 퍼지기 시작한 git branch 관리 방법
+* 기술이라기 보다는 협업하는 사람들끼리 브랜치 관리에 대해 "우리 이렇게 브랜치 전략 짜자" 와 같은 방법론(Model)일 뿐임.
+* git 을 활용한 방법이므로 git 명령들에 대한 사전 지식이 필요함. 
 
 
 
 
 
-## 2) git flow 브랜치와 그 의미
 
-그럼, 각각의 브랜치와 의미에 대해 알아보겠습니다.
+
+# 2. git 명령
+
+
+
+## 1) git 사용 수준의 3단계
+
+* 1단계 : git clone이후 main 브렌치에서 커밋과 푸시만 하는 경우
+
+* 2단계 : 브랜치와 병합을 사용할 수 있고, switch와 restore 를 이용해 롤백을 사용
+
+* 3단계 : 둘 이상의 원격 저장소를 활용하여 소스 코드를 관리하고 협업
+
+
+
+
+
+## 2) git 기본 명령
+
+### git init
+
+```sh
+$ mkdir ~/temp/gittest
+  cd ~/temp/gittest
+
+```
+
+
+
+git init
+
+```sh
+
+$ git config --global user.email "ssongmantop@gmail.com"
+  git config --global user.name "root"
+  git config --global init.defaultBranch <name>
+
+
+$ git init
+
+$ git status
+```
+
+
+
+
+
+### git clone
+
+
+
+
+
+### git commit & push
+
+
+
+
+
+### git checkout
+
+
+
+### git merge
+
+
+
+
+
+### conflic
+
+브랜치 Merge 하는 과정에서 conflict 이 발생하곤 한다.
+
+conflict 상황을 가정하여 처리해보자.
+
+master 에서 A 기능이 
+
+
+
+
+
+
+
+### git branch 삭제
+
+
+
+
+
+## 3) git 고급 명령
+
+자주 사용하지는 않지만 알아두면 유용한 git 명령들이다.
+
+
+
+### git clean
+
+untracked 상태인 파일을 모두 삭제한다.
+
+신규 파일을 생성후 이를 원복하고자 할때 사용된다.
+
+```sh
+$ cd ~/song/gittest
+
+
+# 신규 파일 생성
+$ echo "some1" > some.txt
+  mkdir somedir
+  echo "some2" > somedir/some.txt
+
+
+$ git status
+On branch master
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        somedir/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+$ git clean -f -d
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+$ ll
+total 16
+drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:23 ./
+drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:07 ../
+drwxrwxr-x 8 ktdseduuser ktdseduuser 4096 Sep 17 14:23 .git/
+
+
+```
+
+
+
+
+
+### git hard reset
+
+git reset 명령은 공통적으로 커밋을 되돌릴 때 사용한다.
+
+가장 많이 사용하는 명령은 `reset --hard` 이다.
+
+```sh
+$ cd ~/song/gittest
+
+git switch master
+
+git switch -c reset-test
+
+$ git branch -l
+  master
+* reset-test
+
+git log --oneline -n1
+
+
+
+git log --oneline -n3
+e096ab8 (HEAD -> reset-test) reset 테스트용 커밋
+42b5bd8 update
+
+
+# 이전 커밋 형상으로 reset
+$ git reset --hard HEAD~
+HEAD is now at 42b5bd8 update
+
+# 원복 완료됨
+
+$ git status
+On branch reset-test
+nothing to commit, working tree clean
+
+
+
+# hard reset 의 복구
+$ git reset --hard e096ab8
+HEAD is now at e096ab8 reset 테스트용 커밋
+
+
+
+# 
+# [다시] 이전 커밋 형상으로 reset
+$ git reset --hard 42b5bd8
+HEAD is now at 42b5bd8 update
+
+
+$ git log  --oneline -n2
+42b5bd8 (HEAD -> reset-test) update
+
+```
+
+
+
+로컬 저장소의 커밋은 없어지지 않았다. 사라진 것처럼 보일 뿐이다. 
+
+
+
+
+
+### git stash
+
+
+
+### git merge theirs/ous 옵션 사용
+
+
+
+```sh
+$ cd ~/song/gittest/our-project
+
+$ git branch --show-current
+reset-test
+
+
+
+echo "main1" > main1.txt
+echo "main2" > main2.txt
+
+git add .
+git commit -m "update init"
+
+
+
+# feature1 생성후 전환
+git checkout -b feature1
+
+
+echo "conflict1" > main2.txt
+
+git add .
+
+git commit -m "충돌1"
+
+
+git log --oneline --all --graph -n3
+* 2817a75 (HEAD -> feature1) 충돌1
+* 199ceee (main) update init
+* 8b04559 update
+
+
+
+git diff main
+
+diff --git a/main2.txt b/main2.txt
+index 2041184..1b9074b 100644
+--- a/main2.txt
++++ b/main2.txt
+@@ -1 +1 @@
+-main2
++conflict1
+
+
+
+## 병합시도시 출동 발생
+
+(main) git merge feature1
+
+Updating 199ceee..2817a75
+Fast-forward
+ main2.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+```
+
+
+
+
+
+병합 대상 브렌치 남기기
+
+```sh
+git merge feature1 -X theirs
+
+
+cat main2.txt
+```
+
+
+
+main 브렌치의 내용 남기기
+
+```sh
+git log --oneline -n2
+
+
+# hard reset 으로 병합커밋 되돌리기
+git reset --hard HEAD~
+
+
+
+# ours 옵션으로 병합
+git merge feature1 -X ours
+
+
+cat main2.txt
+```
+
+
+
+
+
+## 4) [참고] git prompt 생성
+
+리눅스에서 git prompt 를 보기 위해서는 아래와 같은 작업이 필요하다.
+
+```sh
+$ vi ~/.bachrc
+...
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+export PS1="\e[01;32m\u@\h \[\e[34m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
+
+
+
+$ source ~/.bashrc
+
+```
+
+
+
+
+
+
+
+
+
+# 3. Git Flow Branch 전략
+
+
+
+
+
+## 1) git flow 브랜치와 그 의미
+
+git flow 에 존재하는 각각의 브랜치와 의미에 대해 알아보자.
 
 
 
@@ -69,7 +400,7 @@ Git-flow에는 5가지 종류의 브랜치가 존재한다.
 
 
 
-## 3) git flow
+## 2) git flow
 
 ![img](gitflow-branch.assets/git-model@2x.png)
 
@@ -170,7 +501,9 @@ git flow의 release 브랜치는 다음과 같이 설명되어 있습니다.
 
 
 
-## 5) git & git flow install
+## 5) [참고] git & git flow install
+
+git 과 git flow 는 서로 다른 설치물이며 아래와 같이 각각 설치가 필요하다.
 
 ```sh
 
@@ -190,8 +523,6 @@ $ git flow version
 1.12.3 (AVH Edition)
 
 ```
-
-
 
 
 
@@ -996,296 +1327,4 @@ Branch 'master' set up to track remote branch 'master' from 'origin'.
 
 
 
-
-
-
-
-
-
-# 2. gitlab 샘플 프로젝트 이해 및 분기
-
-gitlab 샘플 프로젝트 이해 및 분기
-
-- 실습
-- git clone
-- git commit push
-- branch checkout
-
-
-
-
-
-git 사용 3단계
-
-1단계 : main 브렌치에서 커밋과 푸시만 하는 경우
-
-2단계 : 브랜치와 병합을 사용할 수 있고, switch와 restore 를 이용해 롤백을 사용
-
-3단계 : 둘 이상의 원격 저장소를 활용하여 소스 코드를 관리하고 협업
-
-
-
-
-
-### git init
-
-#### 디렉토리 생성
-
-```sh
-$ mkdir ~/temp/gittest
-  cd ~/temp/gittest
-
-```
-
-
-
-
-
-untracked 상태인 파일을 모두 삭제
-
-```sh
-
-$ git init
-
-  git config --global user.email "ssongmantop@gmail.com"
-  git config --global user.name "ssongman"
-
-$ git status
-```
-
-
-
-
-
-
-
-### git clean
-
-신규 파일을 생성후 이를 원복하고자 할때  사용됨
-
-untracked 상태인 파일을 모두 삭제
-
-```sh
-$ cd ~/song/gittest
-
-
-# 신규 파일 생성
-$ echo "some1" > some.txt
-  mkdir somedir
-  echo "some2" > somedir/some.txt
-
-
-$ git status
-On branch master
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-        somedir/
-
-nothing added to commit but untracked files present (use "git add" to track)
-
-$ git clean -f -d
-$ git status
-On branch master
-nothing to commit, working tree clean
-
-$ ll
-total 16
-drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:23 ./
-drwxrwxr-x 3 ktdseduuser ktdseduuser 4096 Sep 17 14:07 ../
-drwxrwxr-x 8 ktdseduuser ktdseduuser 4096 Sep 17 14:23 .git/
-
-
-```
-
-
-
-
-
-### hard reset
-
-git reset 명령은 공통적으로 커밋을 되돌릴 때 사용한다.
-
-가장 많이 사용하는 명령은 `reset --hard` 이다.
-
-```sh
-$ cd ~/song/gittest
-
-git switch master
-
-git switch -c reset-test
-
-$ git branch -l
-  master
-* reset-test
-
-git log --oneline -n1
-
-
-
-git log --oneline -n3
-e096ab8 (HEAD -> reset-test) reset 테스트용 커밋
-42b5bd8 update
-
-
-# 이전 커밋 형상으로 reset
-$ git reset --hard HEAD~
-HEAD is now at 42b5bd8 update
-
-# 원복 완료됨
-
-$ git status
-On branch reset-test
-nothing to commit, working tree clean
-
-
-
-# hard reset 의 복구
-$ git reset --hard e096ab8
-HEAD is now at e096ab8 reset 테스트용 커밋
-
-
-
-# 
-# [다시] 이전 커밋 형상으로 reset
-$ git reset --hard 42b5bd8
-HEAD is now at 42b5bd8 update
-
-
-$ git log  --oneline -n2
-42b5bd8 (HEAD -> reset-test) update
-
-```
-
-
-
-로컬 저장소의 커밋은 없어지지않았다.살진 것처럼 안보일 뿐이다. 
-
-
-
-
-
-### git merge theirs/ous 옵션 사용
-
-
-
-```sh
-$ cd ~/song/gittest/our-project
-
-$ git branch --show-current
-reset-test
-
-
-
-echo "main1" > main1.txt
-echo "main2" > main2.txt
-
-git add .
-git commit -m "update init"
-
-
-
-# feature1 생성후 전환
-git checkout -b feature1
-
-
-echo "conflict1" > main2.txt
-
-git add .
-
-git commit -m "충돌1"
-
-
-git log --oneline --all --graph -n3
-* 2817a75 (HEAD -> feature1) 충돌1
-* 199ceee (main) update init
-* 8b04559 update
-
-
-
-git diff main
-
-diff --git a/main2.txt b/main2.txt
-index 2041184..1b9074b 100644
---- a/main2.txt
-+++ b/main2.txt
-@@ -1 +1 @@
--main2
-+conflict1
-
-
-
-## 병합시도시 출동 발생
-
-(main) git merge feature1
-
-Updating 199ceee..2817a75
-Fast-forward
- main2.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-```
-
-
-
-
-
-병합 대상 브렌치 남기기
-
-```sh
-git merge feature1 -X theirs
-
-
-cat main2.txt
-```
-
-
-
-main 브렌치의 내용 남기기
-
-```sh
-
-git log --oneline -n2
-
-
-# hard reset 으로 병합커밋 되돌리기
-git reset --hard HEAD~
-
-
-
-# ours 옵션으로 병합
-git merge feature1 -X ours
-
-
-
-cat main2.txt
-```
-
-
-
-
-
-
-
-# 3. [참고] 기타
-
-
-
-## 1) git prompt 생성
-
-리눅스에서 git prompt 를 보기 위해서는 아래와 같은 작업이 필요하다.
-
-```sh
-
-$ vi ~/.bachrc
-...
-parse_git_branch() {
-     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-export PS1="\e[01;32m\u@\h \[\e[34m\]\w\[\e[91m\]\$(parse_git_branch)\[\e[00m\]$ "
-
-
-
-$ source ~/.bashrc
-
-```
 

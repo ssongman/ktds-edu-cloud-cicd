@@ -144,8 +144,8 @@ $ mkdir -p /c/githubrepo
  
 $ cd /c/githubrepo
 
-$ git clone https://github.com/ssongman/ktds-edu-kafka-redis.git
-Cloning into 'ktds-edu-kafka-redis'...
+$ git clone https://github.com/ssongman/ktds-edu-cloud-cicd.git
+Cloning into 'ktds-edu-cloud-cicd'...
 remote: Enumerating objects: 590, done.
 remote: Counting objects: 100% (41/41), done.
 remote: Compressing objects: 100% (26/26), done.
@@ -155,7 +155,7 @@ Resolving deltas: 100% (259/259), done.
 
 
 $ ll /c/githubrepo
-drwxr-xr-x 1 ssong 197609 0 Jun 11 14:27 ktds-edu-kafka-redis/
+drwxr-xr-x 1 ssong 197609 0 Jun 11 14:27 ktds-edu-cloud-cicd/
 
 ```
 
@@ -164,7 +164,7 @@ drwxr-xr-x 1 ssong 197609 0 Jun 11 14:27 ktds-edu-kafka-redis/
 만약 교육중 (오타 변경 등의 사유로) 자료가 변경되어 다시 받아야 하는 경우 가 있을 경우 해당 위치에서 git pull 만 다시 받도록 하자.
 
 ```sh
-$ cd /c/githubrepo/ktds-edu-kafka-redis
+$ cd /c/githubrepo/ktds-edu-cloud-cicd
 
 $ git pull
 
@@ -194,7 +194,7 @@ $ git pull
 ```
 ## typora 에서 아래 파일 오픈
 
-C:\githubrepo\ktds-edu-kafka-redis\README.md
+C:\githubrepo\ktds-edu-cloud-cicd\README.md
 ```
 
 ![image-20220702160433029](beforebegin.assets/image-20220702160433029.png)
@@ -211,55 +211,28 @@ C:\githubrepo\ktds-edu-kafka-redis\README.md
 
 개인별 VM Server 접속 환경 및 Kafka 실습을 위한 개인 Topic 정보를 확인하자.
 
-| 담당자 |        소속        | VM  Server | VM  Server IP | kafka  Topic | kafka  Group | 비고 |
-| :----: | :----------------: | :--------: | :-----------: | :----------: | :----------: | :--: |
-| 송양*  | ICIS Tr 아키텍처팀 | bastion01  |  34.xx.xx.xx  | edu-topic01  | edu-group01  |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-|        |                    |            |               |              |              |      |
-
-
-
-
-
-권혜원(ICIS Tr 고객팀) <HYEWON.KWON@KT.COM>;
-김명선(AICC서비스1팀) <MYUNGSUN.KIM@KT.COM>;
-김수진(ICIS Tr 아키텍처팀) <SJ0831.KIM@KT.COM>;
-김재혁(ICIS Tr 빌링팀) <JAEHYUCK.KIM@KT.COM>;
-백상열(ICIS Tr 아키텍처팀) <SY44.BAEK@KT.COM>;
-서정원(고객개발1팀) <JUNGWON.SEO@KT.COM>;
-서현직(인프라DX개발팀) <LESLIE.SEO@KT.COM>;
-송하영(ICIS Tr 아키텍처팀) <HA0.SONG@KT.COM>;
-양행모(고객DX솔루션팀) <HAENGMO.YANG@KT.COM>;
-이도겸(ICIS Tr 아키텍처팀) <DOKYEOM.LEE@KT.COM>;
-이돈민(ICIS Tr 고객팀) <MONEY.MIN@KT.COM>;
-이병훈(DWP개발팀) <BYUNGHOON.LEE@KT.COM>;
-이승미(인프라DX개발팀) <SEUNGMII.LEE@KT.COM>;
-이영효(고객개발1팀) <LEE.YOUNGHYO@KT.COM>;
-이지현(Rater서비스팀) <JIHYUN7.LEE@KT.COM>;
-임성식(ICIS Tr 빌링팀) <SSLIM@KT.COM>;
-임지윤(AI서비스팀) <JEEYOON.LIM@KT.COM>;
-조민정(CRM사업팀) <HS-CHO@KT.COM>;
-최종수(ICIS Tr 아키텍처팀) <JONGSOO.CHOI@KT.COM>
-
-
+|  NO  | 담당자 |        소속         | VM Server | VM Server IP | namespace | 비고 |
+| :--: | :----: | :-----------------: | :-------: | :----------: | :-------: | :--: |
+|  1   | 최종수 | ICIS  Tr 아키텍처팀 | bastion01 | 34.xx.xx.xx  |  user01   |      |
+|  2   | 송양종 | ICIS  Tr 아키텍처팀 | bastion02 | 34.152.18.20 |  user02   |      |
+|  3   | 김수진 | ICIS  Tr 아키텍처팀 | bastion03 |              |  user03   |      |
+|  4   | 백상열 | ICIS  Tr 아키텍처팀 | bastion04 |              |  user04   |      |
+|  5   | 송하영 | ICIS  Tr 아키텍처팀 | bastion05 |              |  user05   |      |
+|  6   | 이도겸 | ICIS  Tr 아키텍처팀 | bastion06 |              |  user06   |      |
+|  7   | 권혜원 |   ICIS  Tr 고객팀   | bastion07 |              |  user07   |      |
+|  8   | 이돈민 |   ICIS  Tr 고객팀   | bastion08 |              |  user08   |      |
+|  9   | 김재혁 |   ICIS  Tr 빌링팀   | bastion09 |              |  user09   |      |
+|  10  | 임성식 |   ICIS  Tr 빌링팀   | bastion10 |              |  user10   |      |
+|  11  | 김명선 |    AICC서비스1팀    | bastion11 |              |  user11   |      |
+|  12  | 서정원 |     고객개발1팀     | bastion12 |              |  user12   |      |
+|  13  | 서현직 |   인프라DX개발팀    | bastion13 |              |  user13   |      |
+|  14  | 양행모 |   고객DX솔루션팀    | bastion14 |              |  user14   |      |
+|  15  | 이병훈 |      DWP개발팀      | bastion15 |              |  user15   |      |
+|  16  | 이승미 |   인프라DX개발팀    | bastion16 |              |  user16   |      |
+|  17  | 이영효 |     고객개발1팀     | bastion17 |              |  user17   |      |
+|  18  | 이지현 |    Rater서비스팀    | bastion18 |              |  user18   |      |
+|  19  | 임지윤 |     AI서비스팀      | bastion19 |              |  user19   |      |
+|  20  | 조민정 |      CRM사업팀      | bastion20 |              |  user20   |      |
 
 
 
@@ -294,7 +267,7 @@ Mobaxterm 을 실행하여 VM 접속정보를 위한 신규 sesion 을 생성하
 
 - Port : 22
 - Advanced SSH settings
-  - Use private key : C:\githubrepo\ktds-edu-kafka-redis\gcp-vm-key\ktdseduuser
+  - Use private key : C:\githubrepo\ktds-edu-cloud-cicd\gcp-vm-key\ktdseduuser
     - 교육자료 Download 되는 자료에 위 key가 포함되어 있음
 
 
@@ -312,7 +285,7 @@ Mobaxterm 을 실행하여 VM 접속정보를 위한 신규 sesion 을 생성하
 
 # 최신 데이터를 한번 더 받는다.
 
-$ cd ~/githubrepo/ktds-edu-kafka-redis
+$ cd ~/githubrepo/ktds-edu-cloud-cicd
 $ git pull
 
 
@@ -322,34 +295,38 @@ $ git pull
 # 만약 pull일 잘 안되는 경우는 모두 삭제후 다시 git clone 받자.
 
 # 삭제
-$ rm -rf ~/githubrepo/ktds-edu-kafka-redis/
+$ rm -rf ~/githubrepo/ktds-edu-cloud-cicd/
 
 $ cd ~/githubrepo
 
 ## git clone 수행
-$ git clone https://github.com/ssongman/ktds-edu-kafka-redis.git
-Cloning into 'ktds-edu-kafka-redis'...
-remote: Enumerating objects: 320, done.
-remote: Counting objects: 100% (320/320), done.
-remote: Compressing objects: 100% (220/220), done.
-remote: Total 320 (delta 95), reused 277 (delta 56), pack-reused 0
-Receiving objects: 100% (320/320), 8.40 MiB | 24.22 MiB/s, done.
-Resolving deltas: 100% (95/95), done.
+$ git clone https://github.com/ssongman/ktds-edu-cloud-cicd.git
+Cloning into 'ktds-edu-cloud-cicd'...
+remote: Enumerating objects: 446, done.
+remote: Counting objects: 100% (446/446), done.
+remote: Compressing objects: 100% (341/341), done.
+remote: Total 446 (delta 132), reused 358 (delta 64), pack-reused 0
+Receiving objects: 100% (446/446), 17.34 MiB | 24.91 MiB/s, done.
+Resolving deltas: 100% (132/132), done.
+
 
 
 # 확인
-$ cd  ~/githubrepo/ktds-edu-kafka-redis
+$ cd  ~/githubrepo/ktds-edu-cloud-cicd
 
-$ ll ~/githubrepo/ktds-edu-kafka-redis
-drwxrwxr-x 8 ktdseduuser ktdseduuser 4096 Sep  3 12:27 .git/
--rw-rw-r-- 1 ktdseduuser ktdseduuser  382 Sep  2 13:45 .gitignore
--rw-rw-r-- 1 ktdseduuser ktdseduuser 4006 Sep  2 13:45 README.md
--rw-rw-r-- 1 ktdseduuser ktdseduuser  461 Sep  2 13:45 SUMMARY.md
-drwxrwxr-x 4 ktdseduuser ktdseduuser 4096 Sep  3 12:27 beforebegin/
-drwxrwxr-x 4 ktdseduuser ktdseduuser 4096 Sep  2 13:45 cloud-setup/
-drwxrwxr-x 2 ktdseduuser ktdseduuser 4096 Sep  2 13:51 gcp-vm-key/
-drwxrwxr-x 7 ktdseduuser ktdseduuser 4096 Sep  3 12:27 kafka/
-drwxrwxr-x 8 ktdseduuser ktdseduuser 4096 Sep  2 13:45 redis/
+$ ll ~/githubrepo/ktds-edu-cloud-cicd
+
+drwxrwxr-x  8 ktdseduuser ktdseduuser 4096 Sep 23 17:11 .git/
+-rw-rw-r--  1 ktdseduuser ktdseduuser 2101 Sep 23 17:11 README.md
+drwxrwxr-x  3 ktdseduuser ktdseduuser 4096 Sep 23 17:11 argocd/
+drwxrwxr-x  3 ktdseduuser ktdseduuser 4096 Sep 23 17:11 beforebegin/
+drwxrwxr-x  3 ktdseduuser ktdseduuser 4096 Sep 23 17:11 cicd/
+drwxrwxr-x  4 ktdseduuser ktdseduuser 4096 Sep 23 17:11 cloud-branch/
+drwxrwxr-x  2 ktdseduuser ktdseduuser 4096 Sep 23 17:11 cluster-setup/
+drwxrwxr-x  2 ktdseduuser ktdseduuser 4096 Sep 23 17:11 helm/
+drwxrwxr-x  3 ktdseduuser ktdseduuser 4096 Sep 23 17:11 jenkins/
+drwxrwxr-x  3 ktdseduuser ktdseduuser 4096 Sep 23 17:11 nexus/
+drwxrwxr-x  8 ktdseduuser ktdseduuser 4096 Sep 23 17:11 sample/
 
 
 ```
