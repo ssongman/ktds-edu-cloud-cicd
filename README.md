@@ -99,7 +99,7 @@
 - Nexus란?
 
   - 사설레포지토리가 필요한 이유
-
+https://www.docker.com/get-started/
 - Nexus 설치 & 설정
 
 - Image Upload/Download 테스트
