@@ -143,6 +143,8 @@ Cluster 환경에서 Kubernetes Plugin 적용 후 아래와 같은 이점이 생
 
 ### 2. 사전준비
 
+https://www.docker.com/get-started/
+
 #### 2.1 Kubernetes Resourece 준비
 
 **serviceAccount**: 쿠버네티스 클러스터 내에서 실행되는 팟(Pod)이 API 서버와 상호 작용할 수 있도록 **권한을 부여하는 데 사용되는 자격증명**입니다. 
@@ -189,12 +191,6 @@ subjects:
 - kind: ServiceAccount
   name: jenkins-admin
   namespace: ${USER_IDENTITY}
-- kind: ServiceAccount
-  name: jenkins-admin
-  namespace: ${USER_IDENTITY}
-
-...
-
 ```
 
 
@@ -205,7 +201,7 @@ subjects:
 
 ##### 2.2.1 GitLab Token 
 
-http://gitlab.35.209.207.26.nip.io/
+http://gitlab.ssongman.duckdns.org/
 
 ![image-20230919090743189](asset/jenkins/image-20230919090743189.png)
 
@@ -259,7 +255,7 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 ![image-20230923002522058](asset/jenkins/image-20230923002522058.png)
 
-**Import Project 정보입력**(http://gitlab.35.209.207.26.nip.io/user01/base-project.git)
+**Import Project 정보입력**(http://gitlab.ssongman.duckdns.org/cjs/base-project.git)
 
 ![image-20230923002120221](asset/jenkins/asdasdfzxcv.png)
 
@@ -267,7 +263,7 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 ```bash
 #base-project clone
-$ git clone http://${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/user01/base-project.git
+$ git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.ssongman.duckdns.org/cjs/base-project.git
 
 Credential : ${GIT_TOKEN} 입력
 
@@ -437,8 +433,8 @@ e66ecbfeda0c7c37211bd3c18755b56c8344f88a5d265d966b1aec11ab7877c0
 $ curl localhost:8080
 Hello Spring World
 
-$ docker tag spring-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-test:1.0.0
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-test:1.0.0
+$ docker tag spring-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-test:1.0.0
 
 ```
 
@@ -447,7 +443,7 @@ $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/sprin
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -506,9 +502,9 @@ CONTAINER ID   IMAGE                COMMAND                  CREATED            
 $ curl localhost:3000
 Hello Express World
 
-$ docker tag express-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-test:1.0.0
+$ docker tag express-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-test:1.0.0
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-test:1.0.0
 1.0.0: digest: sha256:b93ce4d64616e232916dbbf8938921b42a72de64652069e2b3ff89d26e54a219 size: 2836
 
 ```
@@ -516,7 +512,7 @@ $ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/expre
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -582,9 +578,9 @@ b0d3cac56c35   flask-test:1.0.0     "python3 app.py"    3 seconds ago    Up 2 se
 $ curl localhost:8082
 Hello Flask World
 
-$ docker tag flask-test:1.0.0 nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test:1.0.0
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-test]
+$ docker tag flask-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test]
 22e8ae1c18ff: Pushed
 865a5ae0c9f4: Pushed
 96eb9fd00fa3: Pushed
@@ -601,7 +597,7 @@ ce0f4c80e9b7: Pushed
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -642,7 +638,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0 .
+$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0 .
 [+] Building 26.4s (7/7) FINISHED
  => [internal] load build definition from Dockerfile                                                      0.0s
  => => transferring dockerfile: 109B                                                                      0.0s
@@ -651,13 +647,13 @@ $ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/b
  => exporting to image                                                                                    0.1s
  => => exporting layers                                                                                   0.1s
  => => writing image sha256:ce60ae205666db7a58314bf584977a5b5f4aa9d762edfccb76561bd1c5b63c24              0.0s
- => => naming to nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool:1.0.0                             0.0s
+ => => naming to nexus-repo.ssongman.duckdns.org/build-tool:1.0.0                             0.0s
 
 $ docker images
 REPOSITORY                                                      TAG              IMAGE ID       CREATED              SIZE
-nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool          1.0.0            ce60ae205666   About a minute ago   484MB
+nexus-repo.ssongman.duckdns.org/build-tool          1.0.0            ce60ae205666   About a minute ago   484MB
 
-$ docker run -d nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0 sleep 365d
 
 $ docker ps
 $ docker exec -it ${CONTAINER_ID} bash
@@ -668,8 +664,8 @@ Go Version:         go1.11.6
 OS/Arch:            linux/amd64
 $ exit
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/build-tool]
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/build-tool]
 af60d788c1d5: Layer already exists
 c4cfb19af9c8: Layer already exists
 343ddf70e345: Layer already exists
@@ -694,7 +690,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0 -f .\Dockerfile_maven .
+$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0 -f .\Dockerfile_maven .
 [+] Building 3.0s (7/7) FINISHED
  => [internal] load build definition from Dockerfile_maven                             0.0s
  => => transferring dockerfile: 257B                                                   0.0s
@@ -708,13 +704,13 @@ $ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/m
  => exporting to image                                                                 0.0s
  => => exporting layers                                                                0.0s
  => => writing image sha256:fb5cd9a2a8a34454fbf52e816e6dce0d24ac0b202cf30413542b513bc0 0.0s
- => => naming to nexus-repo.nexus.cloud.35.209.207.26.nip.io/maven-build-tool:1.0.0    0.0s
+ => => naming to nexus-repo.ssongman.duckdns.org/maven-build-tool:1.0.0    0.0s
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 808MB
+nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 808MB
 
-$ docker run -d nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ mvn -version
@@ -725,8 +721,8 @@ Default locale: en, platform encoding: UTF-8
 OS name: "linux", version: "5.10.102.1-microsoft-standard-wsl2", arch: "amd64", family: "unix"
 $ exit
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/maven-build-tool]
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/maven-build-tool]
 4d950bb416bc: Layer already exists
 4ddad1bac86f: Layer already exists
 c14a8489df05: Layer already exists
@@ -742,7 +738,7 @@ f7bb7102ce10: Layer already exists
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -759,7 +755,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
+$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
 [+] Building 3.0s (7/7) FINISHED                                                      
  => [internal] load build definition from Dockerfile_npm                              0.0s
  => => transferring dockerfile: 206B                                                  0.0s
@@ -773,15 +769,15 @@ $ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/n
  => exporting to image                                                                0.1s
  => => exporting layers                                                               0.1s
  => => writing image sha256:57e6e02812f56ab3fdb029ead019e207a4462261cbf97c8680656e3d  0.0s
- => => naming to nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool:1.0.0     0.0s
+ => => naming to nexus-repo.ssongman.duckdns.org/npm-build-tool:1.0.0     0.0s
 
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 924MB
+nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 924MB
 
 
-$ docker run -d nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ npm version
@@ -807,8 +803,8 @@ $ npm version
 }
 $ exit
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/npm-build-tool]
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/npm-build-tool]
 564b407be96a: Pushed
 be322b479aee: Layer already exists
 d41bcd3a037b: Layer already exists
@@ -825,7 +821,7 @@ f25ec1d93a58: Layer already exists
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -844,7 +840,7 @@ Image Build & Push
 
 
 ```bash
-$ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0 -f .\Dockerfile_python .
+$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0 -f .\Dockerfile_python .
 [+] Building 7.5s (7/7) FINISHED
  => [internal] load build definition from Dockerfile_python                                       0.0s
  => => transferring dockerfile: 221B                                                              0.0s
@@ -868,23 +864,23 @@ $ docker build -t nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/p
  => exporting to image                                                                            0.1s
  => => exporting layers                                                                           0.1s
  => => writing image sha256:a9d3550eb858e1e56ec49eb4025b82cd368351919cc211d201546f8e21846370      0.0s
- => => naming to nexus-repo.nexus.cloud.35.209.207.26.nip.io/python-build-tool:1.0.0              0.0s
+ => => naming to nexus-repo.ssongman.duckdns.org/python-build-tool:1.0.0              0.0s
 
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 1.02GB
+nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 1.02GB
 
 
-$ docker run -d nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ python --version
 Python 3.11.5
 $ exit
 
-$ docker push nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0
-The push refers to repository [nexus-repo.nexus.cloud.35.209.207.26.nip.io/python-build-tool]
+$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/python-build-tool]
 700a6240cd12: Pushed
 49df279faf6c: Pushed
 f2c0489561b5: Pushed
@@ -901,7 +897,7 @@ b8544860ba0b: Layer already exists
 Image Push 확인
 
 ```
-http://nexus.nexus.cloud.35.209.207.26.nip.io
+http://nexus.ssongman.duckdns.org
 ```
 
 
@@ -1263,8 +1259,8 @@ docker가 **CRI(Container Runtime Interface)** 를 구현하지 않았고, kuber
 def label = "hello-${UUID.randomUUID().toString()}"
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'maven', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'maven', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
@@ -1307,8 +1303,8 @@ podTemplate(label: label,
 def label = "hello-${UUID.randomUUID().toString()}"
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'npm', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'npm', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
@@ -1349,8 +1345,8 @@ def label = "hello-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'flask', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'flask', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
