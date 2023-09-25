@@ -114,7 +114,7 @@ ArgoCD가 Pull Type에 해당한다. ArgoCD는 연결된 Git Repository를 지�
 
 깃옵스를 구현할 때는 Pull Type 배포 전략을 권장하는데, 그 이유는 자격정보의 관리 때문이다. Push를 하기 위해서는 Push를 수행하는 지점에서(비록 외부 환경이라 할 지라도)관리 정보를 가지고 있어야 하며, 어떤 방식으로든 비인가자에 의하여 해당 Git Repository로 Push 이벤트가 발생한다면 배포 환경에 변경이 발생하여 피해를 입을 수 있기 때문이다.
 
-이와 반면에 Pull 이벤트를 기반으로 동작한다면 CD를 수행하는 ArgoCD에서만 해당 레포지토리에 대한 인증 정보를 가지고 있으면 되고, Pull 권한만을 필요로 하기 때문에 SSOT(Single Source of Truth)에 의도치 않은 변경이 발생할 위험으로부터 비교적 자유로워진다.
+이와 반면에 Pull 이벤트를 기반으로 동작한다면 CD를 수행하는 ArgoCD에서만 해당 레포지토리에 대한 인증 정보를 가지고 있으면 되고, Pull 권한만을 필요로 하기 때문에 SSOT(Single Source of Truth-단일 진실 공급원)에 의도치 않은 변경이 발생할 위험으로부터 비교적 자유로워진다.
 
 *[SSOT](https://en.wikipedia.org/wiki/Single_source_of_truth)는  데이터베이스, 애플리케이션, 프로세스 등의 모든 데이터에 대해 하나의 출처를 사용하는 개념을 의미합니다. 이는 데이터의 정확성, 일관성, 신뢰성을 보장하고, 일관성 있는 의사결정 및 작업 효율성을 높이는 데 도움을 줍니다.
 
@@ -150,7 +150,7 @@ spec:
         app: hello-spring
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-jenkins:1.0.0
+      - image: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-jenkins:1.0.0
         name: hello-spring
         ports:
         - containerPort: 8080
@@ -207,7 +207,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/spring-jenkins
+- name: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-jenkins
   newTag: 1.0.0
 ```
 
@@ -239,7 +239,7 @@ spec:
         app: hello-express
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins:1.0.0
+      - image: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-jenkins:1.0.0
         name: hello-express
         ports:
         - containerPort: 3000
@@ -295,7 +295,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/express-jenkins
+- name: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-jenkins
   newTag: 1.0.0
 ```
 
@@ -327,7 +327,7 @@ spec:
         app: hello-flask
     spec:
       containers:
-      - image: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-jenkins:1.0.0
+      - image: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-jenkins:1.0.0
         name: hello-flask
         ports:
         - containerPort: 8082
@@ -384,7 +384,7 @@ resources:
 - deployment.yaml
 - ingress.yaml
 images:
-- name: nexus-repo.nexus.cloud.35.209.207.26.nip.io/${USER_IDENTITY}/flask-jenkins
+- name: nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-jenkins
   newTag: 1.0.0
 ```
 
