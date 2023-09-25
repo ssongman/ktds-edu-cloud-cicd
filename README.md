@@ -103,5 +103,5 @@
 - Nexus 설치 & 설정
 
 - Image Upload/Download 테스트
-- https://www.docker.com/get-started/
+
   
