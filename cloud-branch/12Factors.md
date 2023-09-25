@@ -102,7 +102,7 @@ Code Base는  Git, SVN과 같은 버전 컨트롤 시스템(VCS)을 사용하여
 
 ## 3) Config(설정)
 
-**: 환경(Envirionment)별 설정값을 별도 과리 하라**
+**: 환경(Envirionment)별 설정값을 별도 관리 하라**
 
 
 

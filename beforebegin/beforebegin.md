@@ -271,7 +271,7 @@ C:\githubrepo\ktds-edu-cloud-cicd\README.md
 |  4   | 백상열 | ICIS  Tr 아키텍처팀 | bastion04 | 35.228.226.185 |  user04   |      |
 |  5   | 송하영 | ICIS  Tr 아키텍처팀 | bastion05 | 34.88.108.153  |  user05   |      |
 |  6   | 이도겸 | ICIS  Tr 아키텍처팀 | bastion06 | 34.176.177.28  |  user06   |      |
-|  7   | 권혜원 |   ICIS  Tr 고객팀   | bastion07 |  35.241.96.72  |  user07   |      |
+|  7   | 한용희 |   ICIS  Tr 고객팀   | bastion07 |  35.241.96.72  |  user07   |      |
 |  8   | 이돈민 |   ICIS  Tr 고객팀   | bastion08 | 35.190.230.48  |  user08   |      |
 |  9   | 김재혁 |   ICIS  Tr 빌링팀   | bastion09 | 34.146.60.112  |  user09   |      |
 |  10  | 임성식 |   ICIS  Tr 빌링팀   | bastion10 | 34.64.123.144  |  user10   |      |

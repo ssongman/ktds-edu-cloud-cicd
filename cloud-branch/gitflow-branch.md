@@ -885,7 +885,7 @@ ec24e4e create userlist file
 
 
 # 1) 특정 commit 주소로 되돌리기
-$ git reset --hard ec24e4e
+$ git reset --hard 8d879c5
 HEAD is now at cf9f83f init update
 
 # 확인
@@ -1038,7 +1038,7 @@ $ git stash clear
 
 
 
-### git merge theirs/ous 옵션 사용
+### git merge theirs/ours 옵션 사용
 
 충돌 해결 자체는 어렵고 내가 의도한 데로 되지 않는 경우가 많다.
 
