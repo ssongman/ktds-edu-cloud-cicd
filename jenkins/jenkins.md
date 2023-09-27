@@ -155,7 +155,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: jenkins-admin
-  namespace: ${USER_IDENTITY}
+  namespace: user02
 ```
 
 
@@ -190,7 +190,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: jenkins-admin
-  namespace: ${USER_IDENTITY}
+  namespace: user02
 ```
 
 
@@ -263,13 +263,13 @@ https://github.com/settings/tokens or github -> settings -> developer settings -
 
 ```bash
 #base-project clone
-$ git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.ssongman.duckdns.org/cjs/base-project.git
+$ git clone http://user02:${GIT_TOKEN}@gitlab.ssongman.duckdns.org/cjs/base-project.git
 
 Credential : ${GIT_TOKEN} 입력
 
 ```
 
-**${USER_IDENTITY}, ${GIT_TOKEN} 일괄 변경**
+**user02, ${GIT_TOKEN} 일괄 변경**
 
 
 
@@ -433,8 +433,8 @@ e66ecbfeda0c7c37211bd3c18755b56c8344f88a5d265d966b1aec11ab7877c0
 $ curl localhost:8080
 Hello Spring World
 
-$ docker tag spring-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-test:1.0.0
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/spring-test:1.0.0
+$ docker tag spring-test:1.0.0 nexus-repo.ssongman.duckdns.org/user02/spring-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/spring-test:1.0.0
 
 ```
 
@@ -502,9 +502,9 @@ CONTAINER ID   IMAGE                COMMAND                  CREATED            
 $ curl localhost:3000
 Hello Express World
 
-$ docker tag express-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-test:1.0.0
+$ docker tag express-test:1.0.0 nexus-repo.ssongman.duckdns.org/user02/express-test:1.0.0
 
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/express-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/express-test:1.0.0
 1.0.0: digest: sha256:b93ce4d64616e232916dbbf8938921b42a72de64652069e2b3ff89d26e54a219 size: 2836
 
 ```
@@ -578,9 +578,9 @@ b0d3cac56c35   flask-test:1.0.0     "python3 app.py"    3 seconds ago    Up 2 se
 $ curl localhost:8082
 Hello Flask World
 
-$ docker tag flask-test:1.0.0 nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test:1.0.0
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test:1.0.0
-The push refers to repository [nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/flask-test]
+$ docker tag flask-test:1.0.0 nexus-repo.ssongman.duckdns.org/user02/flask-test:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/flask-test:1.0.0
+The push refers to repository [nexus-repo.ssongman.duckdns.org/user02/flask-test]
 22e8ae1c18ff: Pushed
 865a5ae0c9f4: Pushed
 96eb9fd00fa3: Pushed
@@ -638,7 +638,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0 .
+$ docker build -t nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0 .
 [+] Building 26.4s (7/7) FINISHED
  => [internal] load build definition from Dockerfile                                                      0.0s
  => => transferring dockerfile: 109B                                                                      0.0s
@@ -653,7 +653,7 @@ $ docker images
 REPOSITORY                                                      TAG              IMAGE ID       CREATED              SIZE
 nexus-repo.ssongman.duckdns.org/build-tool          1.0.0            ce60ae205666   About a minute ago   484MB
 
-$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0 sleep 365d
 
 $ docker ps
 $ docker exec -it ${CONTAINER_ID} bash
@@ -664,7 +664,7 @@ Go Version:         go1.11.6
 OS/Arch:            linux/amd64
 $ exit
 
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0
 The push refers to repository [nexus-repo.ssongman.duckdns.org/build-tool]
 af60d788c1d5: Layer already exists
 c4cfb19af9c8: Layer already exists
@@ -690,7 +690,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0 -f .\Dockerfile_maven .
+$ docker build -t nexus-repo.ssongman.duckdns.org/user02/maven-build-tool:1.0.0 -f .\Dockerfile_maven .
 [+] Building 3.0s (7/7) FINISHED
  => [internal] load build definition from Dockerfile_maven                             0.0s
  => => transferring dockerfile: 257B                                                   0.0s
@@ -708,9 +708,9 @@ $ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-t
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 808MB
+nexus-repo.ssongman.duckdns.org/user02/maven-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 808MB
 
-$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/user02/maven-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ mvn -version
@@ -721,7 +721,7 @@ Default locale: en, platform encoding: UTF-8
 OS name: "linux", version: "5.10.102.1-microsoft-standard-wsl2", arch: "amd64", family: "unix"
 $ exit
 
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/maven-build-tool:1.0.0
 The push refers to repository [nexus-repo.ssongman.duckdns.org/maven-build-tool]
 4d950bb416bc: Layer already exists
 4ddad1bac86f: Layer already exists
@@ -755,7 +755,7 @@ COPY ./kustomize /usr/local/bin/kustomize
 Image Build & Push
 
 ```bash
-$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
+$ docker build -t nexus-repo.ssongman.duckdns.org/user02/npm-build-tool:1.0.0 -f .\Dockerfile_npm .
 [+] Building 3.0s (7/7) FINISHED                                                      
  => [internal] load build definition from Dockerfile_npm                              0.0s
  => => transferring dockerfile: 206B                                                  0.0s
@@ -774,10 +774,10 @@ $ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-too
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 924MB
+nexus-repo.ssongman.duckdns.org/user02/npm-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 924MB
 
 
-$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/user02/npm-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ npm version
@@ -803,7 +803,7 @@ $ npm version
 }
 $ exit
 
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/npm-build-tool:1.0.0
 The push refers to repository [nexus-repo.ssongman.duckdns.org/npm-build-tool]
 564b407be96a: Pushed
 be322b479aee: Layer already exists
@@ -840,7 +840,7 @@ Image Build & Push
 
 
 ```bash
-$ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0 -f .\Dockerfile_python .
+$ docker build -t nexus-repo.ssongman.duckdns.org/user02/python-build-tool:1.0.0 -f .\Dockerfile_python .
 [+] Building 7.5s (7/7) FINISHED
  => [internal] load build definition from Dockerfile_python                                       0.0s
  => => transferring dockerfile: 221B                                                              0.0s
@@ -869,17 +869,17 @@ $ docker build -t nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-
 
 $ docker images
 REPOSITORY                                                      TAG       IMAGE ID       CREATED            SIZE
-nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 1.02GB
+nexus-repo.ssongman.duckdns.org/user02/python-build-tool    1.0.0     fb5cd9a2a8a3   About a minute ago 1.02GB
 
 
-$ docker run -d nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0 sleep 365d
+$ docker run -d nexus-repo.ssongman.duckdns.org/user02/python-build-tool:1.0.0 sleep 365d
 
 $ docker exec -it ${CONTAINER_ID} bash
 $ python --version
 Python 3.11.5
 $ exit
 
-$ docker push nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0
+$ docker push nexus-repo.ssongman.duckdns.org/user02/python-build-tool:1.0.0
 The push refers to repository [nexus-repo.ssongman.duckdns.org/python-build-tool]
 700a6240cd12: Pushed
 49df279faf6c: Pushed
@@ -977,9 +977,8 @@ $ cd jenkins
 $ vi values.yaml
 
 #helm chart install 
-$ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f values.yaml \
+$ helm -n user02 install jenkins jenkinsci/jenkins --version=4.6.4 -f values.yaml \
 --set controller.ingress.enabled=true \
---set controller.ingress.hostName=jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io \
 --set controller.adminPassword=new1234! \
 --set serviceAccount.create=false \
 --set serviceAccount.name=jenkins-admin \
@@ -988,6 +987,10 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
 --set agent.resources.requests.memory=1024Mi \
 --set agent.resources.limits.cpu=1024m \
 --set agent.resources.limits.memory=1024Mi
+
+
+--set controller.ingress.hostName=jenkins.user02.cloud.35.209.207.26.nip.io \
+
 
     image: "jenkins/inbound-agent:3142.vcfca_0cd92128-1"
     name: "jnlp"
@@ -999,7 +1002,7 @@ $ helm -n ${USER_IDENTITY} install jenkins jenkinsci/jenkins --version=4.6.4 -f 
         
 
 #helm chart delete
-$ helm -n ${USER_IDENTITY} delete jenkins
+$ helm -n user02 delete jenkins
 
 ```
 
@@ -1011,7 +1014,7 @@ $ helm -n ${USER_IDENTITY} delete jenkins
 
 ### 4. jenkins 설정
 
-Jenkins 접속(http://jenkins.${USER_IDENTITY}.cloud.35.209.207.26.nip.io)
+Jenkins 접속(http://jenkins.user02.cloud.35.209.207.26.nip.io)
 
 ![image-20230918211841802](asset/jenkins/image-20230918211841802.png)
 
@@ -1259,14 +1262,14 @@ docker가 **CRI(Container Runtime Interface)** 를 구현하지 않았고, kuber
 def label = "hello-${UUID.randomUUID().toString()}"
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'maven', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'maven', image: 'nexus-repo.ssongman.duckdns.org/user02/maven-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
             container('maven') {
                 sh"""
-                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://user02:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/user02/base-project.git
                 cd base-project/sample/hello-world-spring/demo
                 mvn clean package 
                 """
@@ -1277,8 +1280,8 @@ podTemplate(label: label,
                     sh """
                     cd base-project/sample/hello-world-spring/demo
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/spring-jenkins:1.0.0  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/user02/spring-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/user02/spring-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
@@ -1303,14 +1306,14 @@ podTemplate(label: label,
 def label = "hello-${UUID.randomUUID().toString()}"
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'npm', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'npm', image: 'nexus-repo.ssongman.duckdns.org/user02/npm-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
             container('npm') {
                 sh"""
-                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://user02:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/user02/base-project.git
                 """
             }
         }
@@ -1319,8 +1322,8 @@ podTemplate(label: label,
                     sh """
                     cd base-project/sample/hello-world-express
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/express-jenkins:1.0.0  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/user02/express-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/user02/express-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
@@ -1345,14 +1348,14 @@ def label = "hello-${UUID.randomUUID().toString()}"
 
 podTemplate(label: label,
 	containers: [
-        containerTemplate(name: 'flask', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
-        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/${USER_IDENTITY}/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
+        containerTemplate(name: 'flask', image: 'nexus-repo.ssongman.duckdns.org/user02/python-build-tool:1.0.0', ttyEnabled: true, command: 'cat'),
+        containerTemplate(name: 'podman', image: 'nexus-repo.ssongman.duckdns.org/user02/build-tool:1.0.0', ttyEnabled: true, command: 'cat', privileged:true)
   ]) {
     node(label) {
         stage('Get Source') {
             container('flask') {
                 sh"""
-                git clone http://${USER_IDENTITY}:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/${USER_IDENTITY}/base-project.git
+                git clone http://user02:${GIT_TOKEN}@gitlab.35.209.207.26.nip.io/user02/base-project.git
                 """
             }
         }
@@ -1361,8 +1364,8 @@ podTemplate(label: label,
                     sh """
                     cd base-project/sample/hello-world-flask
                     podman login -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD} ${NEXUS_HOST} --tls-verify=false
-                    podman build -t ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
-                    podman push ${NEXUS_HOST}/${USER_IDENTITY}/flask-jenkins:1.0.0  --tls-verify=false
+                    podman build -t ${NEXUS_HOST}/user02/flask-jenkins:1.0.0 --cgroup-manager=cgroupfs --tls-verify=false . 
+                    podman push ${NEXUS_HOST}/user02/flask-jenkins:1.0.0  --tls-verify=false
                     """
             }
         }
